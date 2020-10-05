@@ -18,4 +18,4 @@ mongo
 ```bash
 bin/start.sh
 ```
-5. Your Spring Boot app should now be running and connected to your local MongoDB instance. Verify this by testing queries found in [localhost:8080/swagger-ui.html](localhost:8080/swagger-ui.html).
+5. Your Spring Boot app should now be running and connected to your local MongoDB instance. Verify this by testing queries found in [localhost:8080/swagger-ui.html].
