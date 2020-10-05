@@ -9,8 +9,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/sound")
+@RequestMapping("/sounds")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class SoundController {
+
+    public static final String SOUNDS_SWAGGER_GROUP_NAME = "Sounds";
 
     @Autowired
     private SoundRepository soundRepository;
@@ -24,12 +27,12 @@ public class SoundController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Sound> fetchSoundById(@PathVariable Integer id) {
-        return new ResponseEntity<>(soundRepository.findById(id).get(), HttpStatus.OK);
+    public ResponseEntity<Sound> getSoundById(@PathVariable Integer id) {
+        return new ResponseEntity<>(soundRepository.findById(id).orElse(null), HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<Iterable<Sound>> fetchAllSounds() {
+    public ResponseEntity<Iterable<Sound>> getAllSounds() {
         return new ResponseEntity<>(soundRepository.findAll(), HttpStatus.OK);
     }
 
@@ -38,4 +41,5 @@ public class SoundController {
         soundRepository.deleteById(id);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
+
 }

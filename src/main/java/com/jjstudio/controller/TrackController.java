@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/tracks")
 public class TrackController {
 
+    public static final String TRACKS_SWAGGER_GROUP_NAME = "Tracks";
+
     @Autowired
     private TrackRepository trackRepository;
 
@@ -20,12 +22,12 @@ public class TrackController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Track> fetchTrackById(@PathVariable Integer id) {
-        return new ResponseEntity<>(trackRepository.findById(id).get(), HttpStatus.OK);
+    public ResponseEntity<Track> getTrackById(@PathVariable Integer id) {
+        return new ResponseEntity<>(trackRepository.findById(id).orElse(null), HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<Iterable<Track>> fetchAllTracks() {
+    public ResponseEntity<Iterable<Track>> getAllTracks() {
         return new ResponseEntity<>(trackRepository.findAll(), HttpStatus.OK);
     }
 
@@ -33,4 +35,5 @@ public class TrackController {
     public ResponseEntity deleteTrack(@PathVariable String id) {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 }

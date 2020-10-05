@@ -2,9 +2,11 @@ package com.jjstudio.controller;
 
 import com.jjstudio.dto.user.CreateUserRequest;
 import com.jjstudio.dto.user.UpdateUserRequest;
+import com.jjstudio.dto.user.CreateUserErrorResponse;
 import com.jjstudio.exception.UserNotFoundException;
 import com.jjstudio.resource.UserRepository;
 import com.jjstudio.model.User;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +19,18 @@ import java.sql.Timestamp;
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class UserController {
 
+    public static final String USERS_SWAGGER_GROUP_NAME = "Users";
+
     @Autowired
     private UserRepository userRepository;
 
     @PostMapping
     public ResponseEntity createUser(@RequestBody CreateUserRequest request) {
+        User existingUser = userRepository.findByEmail(request.getEmail());
+        if (existingUser != null) {
+            return new ResponseEntity(new CreateUserErrorResponse(request.getEmail()), HttpStatus.BAD_REQUEST);
+        }
+
         User user = new User();
         user.setEmail(request.getEmail());
         user.setUserName(request.getUserName());
@@ -41,13 +50,14 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> readUser(@PathVariable Integer id) throws UserNotFoundException {
-        return new ResponseEntity<>(userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id)), HttpStatus.OK);
+    public ResponseEntity<User> getUserByEmail(@PathVariable String id) throws UserNotFoundException {
+        return new ResponseEntity<>(userRepository.findById(new ObjectId(id)).orElseThrow(() -> new UserNotFoundException(id)), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateUser(@PathVariable Integer id, @RequestBody UpdateUserRequest request) {
-        User user = userRepository.findById(id).get();
+    public ResponseEntity updateUserByEmail(@PathVariable String id, @RequestBody UpdateUserRequest request) throws UserNotFoundException {
+        User user = userRepository.findById(new ObjectId(id)).orElseThrow(() -> new UserNotFoundException(id));
+
         user.setEmail(request.getEmail() != null ? request.getEmail() : user.getEmail());
         user.setPassword(request.getPassword() != null ? request.getPassword() : user.getPassword());
         user.setFirstName(request.getFirstName() != null ? request.getFirstName() : user.getFirstName());
@@ -60,8 +70,9 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteUser(@PathVariable Integer id) {
-        userRepository.deleteById(id);
+    public ResponseEntity deleteUserByEmail(@PathVariable String id) {
+        userRepository.deleteById(new ObjectId(id));
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 }

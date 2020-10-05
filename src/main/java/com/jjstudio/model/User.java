@@ -1,19 +1,23 @@
 package com.jjstudio.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import java.sql.Timestamp;
+import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.FieldType;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
-@Entity
-@Table
+import java.util.Date;
+
+@Document(collection="users")
 public class User {
-    private int id;
+
+    @MongoId(value = FieldType.OBJECT_ID)
+    private ObjectId id;
 
     private String email;
 
     private String password;
 
-    private Timestamp dateJoined;
+    private Date dateJoined;
 
     private String firstName;
 
@@ -21,11 +25,24 @@ public class User {
 
     private String userName;
 
-    public int getId() {
+    public User() {
+    }
+
+    public User(ObjectId id, String email, String password, Date dateJoined, String firstName, String lastName, String userName) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.dateJoined = dateJoined;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.userName = userName;
+    }
+
+    public ObjectId getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(ObjectId id) {
         this.id = id;
     }
 
@@ -45,11 +62,11 @@ public class User {
         this.password = password;
     }
 
-    public Timestamp getDateJoined() {
+    public Date getDateJoined() {
         return dateJoined;
     }
 
-    public void setDateJoined(Timestamp dateJoined) {
+    public void setDateJoined(Date dateJoined) {
         this.dateJoined = dateJoined;
     }
 
@@ -76,4 +93,5 @@ public class User {
     public void setUserName(String userName) {
         this.userName = userName;
     }
+
 }

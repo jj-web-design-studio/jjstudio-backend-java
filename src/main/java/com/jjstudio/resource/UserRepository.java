@@ -1,8 +1,11 @@
 package com.jjstudio.resource;
 
 import com.jjstudio.model.User;
-import org.springframework.data.repository.CrudRepository;
+import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface UserRepository extends CrudRepository<User, Integer> {
+public interface UserRepository extends MongoRepository<User, ObjectId> {
+
+    User findByEmail(String email);
 
 }

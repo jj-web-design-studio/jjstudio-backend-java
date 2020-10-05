@@ -2,13 +2,10 @@ package com.jjstudio.model;
 
 import com.jjstudio.util.TimeSignature;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.util.ArrayList;
 
-@Entity
-@Table
 public class Track {
+
     private Integer id;
 
     private String name;
@@ -48,4 +45,5 @@ public class Track {
     public void setContents(ArrayList<ArrayList<Sound>> contents) {
         this.contents = contents;
     }
+
 }
