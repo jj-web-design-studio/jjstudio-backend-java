@@ -7,6 +7,8 @@ import com.jjstudio.exception.UserNotFoundException;
 import com.jjstudio.resource.UserRepository;
 import com.jjstudio.model.User;
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,8 @@ import java.sql.Timestamp;
 @RequestMapping("/users")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class UserController {
+
+    private final Logger logger = LoggerFactory.getLogger(SoundController.class);
 
     public static final String USERS_SWAGGER_GROUP_NAME = "Users";
 
@@ -50,12 +54,12 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserByEmail(@PathVariable String id) throws UserNotFoundException {
+    public ResponseEntity<User> getUser(@PathVariable String id) throws UserNotFoundException {
         return new ResponseEntity<>(userRepository.findById(new ObjectId(id)).orElseThrow(() -> new UserNotFoundException(id)), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateUserByEmail(@PathVariable String id, @RequestBody UpdateUserRequest request) throws UserNotFoundException {
+    public ResponseEntity updateUser(@PathVariable String id, @RequestBody UpdateUserRequest request) throws UserNotFoundException {
         User user = userRepository.findById(new ObjectId(id)).orElseThrow(() -> new UserNotFoundException(id));
 
         user.setEmail(request.getEmail() != null ? request.getEmail() : user.getEmail());
@@ -70,7 +74,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteUserByEmail(@PathVariable String id) {
+    public ResponseEntity deleteUser(@PathVariable String id) {
         userRepository.deleteById(new ObjectId(id));
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
