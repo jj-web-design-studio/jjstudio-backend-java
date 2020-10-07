@@ -2,6 +2,8 @@ package com.jjstudio.controller;
 
 import com.jjstudio.model.Track;
 import com.jjstudio.resource.TrackRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/tracks")
 public class TrackController {
+
+    private final Logger logger = LoggerFactory.getLogger(SoundController.class);
 
     public static final String TRACKS_SWAGGER_GROUP_NAME = "Tracks";
 
