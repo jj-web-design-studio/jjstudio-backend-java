@@ -1,12 +1,16 @@
 package com.jjstudio.model;
 
 import com.jjstudio.util.TimeSignature;
+import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.mapping.FieldType;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import java.util.ArrayList;
 
 public class Track {
 
-    private Integer id;
+    @MongoId(value = FieldType.OBJECT_ID)
+    private ObjectId id;
 
     private String name;
 
@@ -14,11 +18,11 @@ public class Track {
 
     private ArrayList<ArrayList<Sound>> contents;
 
-    public Integer getId() {
+    public ObjectId getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(ObjectId id) {
         this.id = id;
     }
 
