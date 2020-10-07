@@ -2,6 +2,7 @@ package com.jjstudio.controller;
 
 import com.jjstudio.model.Track;
 import com.jjstudio.resource.TrackRepository;
+import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/tracks")
 public class TrackController {
 
-    private final Logger logger = LoggerFactory.getLogger(SoundController.class);
+    private final Logger logger = LoggerFactory.getLogger(TrackController.class);
 
     public static final String TRACKS_SWAGGER_GROUP_NAME = "Tracks";
 
@@ -26,8 +27,8 @@ public class TrackController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Track> getTrackById(@PathVariable Integer id) {
-        return new ResponseEntity<>(trackRepository.findById(id).orElse(null), HttpStatus.OK);
+    public ResponseEntity<Track> getTrackById(@PathVariable String id) {
+        return new ResponseEntity<>(trackRepository.findById(new ObjectId(id)).orElse(null), HttpStatus.OK);
     }
 
     @GetMapping

@@ -2,9 +2,11 @@ package com.jjstudio.model;
 
 import org.bson.types.Binary;
 import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.FieldType;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
+@Document(collection="sounds")
 public class Sound {
 
     @MongoId(value = FieldType.OBJECT_ID)

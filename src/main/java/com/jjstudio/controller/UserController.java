@@ -21,7 +21,7 @@ import java.sql.Timestamp;
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class UserController {
 
-    private final Logger logger = LoggerFactory.getLogger(SoundController.class);
+    private final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     public static final String USERS_SWAGGER_GROUP_NAME = "Users";
 

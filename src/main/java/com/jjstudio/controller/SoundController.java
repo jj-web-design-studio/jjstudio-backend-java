@@ -4,6 +4,7 @@ import com.jjstudio.model.Sound;
 import com.jjstudio.resource.SoundRepository;
 import org.bson.BsonBinarySubType;
 import org.bson.types.Binary;
+import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,8 +47,8 @@ public class SoundController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Sound> getSoundById(@PathVariable Integer id) {
-        return new ResponseEntity<>(soundRepository.findById(id).orElse(null), HttpStatus.OK);
+    public ResponseEntity<Sound> getSoundById(@PathVariable String id) {
+        return new ResponseEntity<>(soundRepository.findById(new ObjectId(id)).orElse(null), HttpStatus.OK);
     }
 
     @GetMapping
@@ -56,9 +57,9 @@ public class SoundController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteSound(@PathVariable Integer id) {
-        soundRepository.deleteById(id);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    public ResponseEntity deleteSound(@PathVariable String id) {
+        soundRepository.deleteById(new ObjectId(id));
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }
