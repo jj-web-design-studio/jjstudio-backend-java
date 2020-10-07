@@ -30,9 +30,10 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity createUser(@RequestBody CreateUserRequest request) {
-        User existingUser = userRepository.findByEmail(request.getEmail());
-        if (existingUser != null) {
-            return new ResponseEntity(new CreateUserErrorResponse(request.getEmail()), HttpStatus.BAD_REQUEST);
+        if (emailAlreadyExists(request.getEmail())) {
+            return new ResponseEntity<>(new CreateUserErrorResponse(request.getEmail()), HttpStatus.BAD_REQUEST);
+        } else if (userNameAlreadyExists(request.getUserName())) {
+            return new ResponseEntity<>("The user with userName " + request.getUserName() + " already exists.", HttpStatus.BAD_REQUEST);
         }
 
         User user = new User();
@@ -46,6 +47,16 @@ public class UserController {
         userRepository.save(user);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    private boolean userNameAlreadyExists(String userName) {
+        User existingUser = userRepository.findByUserName(userName);
+        return existingUser != null;
+    }
+
+    private boolean emailAlreadyExists(String email) {
+        User existingUser = userRepository.findByEmail(email);
+        return existingUser != null;
     }
 
     @GetMapping
