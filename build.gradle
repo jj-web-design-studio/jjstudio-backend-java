@@ -14,7 +14,8 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
 bootJar {
-    archiveFileName = 'jj-studio.jar'
+    baseName = 'jj-studio'
+    version = '0.1.0'
 }
 
 repositories {
