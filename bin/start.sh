@@ -1,2 +1,1 @@
-./gradlew build
-java -jar build/libs/jj-studio.jar
+./gradlew build && java -jar build/libs/jj-studio-0.1.0.jar
