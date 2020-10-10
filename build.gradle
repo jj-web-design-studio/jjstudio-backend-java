@@ -28,8 +28,7 @@ targetCompatibility = 1.8
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.3.4.RELEASE'
-    implementation group: 'io.springfox', name: 'springfox-swagger2', version: '3.0.0'
-    implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '3.0.0'
+    implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
 
     runtimeOnly("mysql:mysql-connector-java")
 
