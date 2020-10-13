@@ -1,5 +1,6 @@
 package com.jjstudio.controller;
 
+import com.jjstudio.dto.track.SaveTrackRequest;
 import com.jjstudio.model.Track;
 import com.jjstudio.resource.TrackRepository;
 import org.bson.types.ObjectId;
@@ -16,13 +17,15 @@ public class TrackController {
 
     private final Logger logger = LoggerFactory.getLogger(TrackController.class);
 
-    public static final String TRACKS_SWAGGER_GROUP_NAME = "Tracks";
-
     @Autowired
     private TrackRepository trackRepository;
 
     @PostMapping
-    public ResponseEntity saveTrack() {
+    public ResponseEntity saveTrack(@RequestBody SaveTrackRequest request) {
+        Track track = new Track();
+        track.setName(request.getName());
+        track.setTimeSignature(request.getTimeSignature());
+        track.setContents(request.getContents());
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 

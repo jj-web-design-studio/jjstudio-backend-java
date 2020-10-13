@@ -1,28 +1,14 @@
-package com.jjstudio.model;
+package com.jjstudio.dto.track;
 
 import com.jjstudio.util.TimeSignature;
-import org.bson.types.ObjectId;
-import org.springframework.data.mongodb.core.mapping.FieldType;
-import org.springframework.data.mongodb.core.mapping.MongoId;
 
-public class Track {
-
-    @MongoId(value = FieldType.OBJECT_ID)
-    private ObjectId id;
+public class SaveTrackRequest {
 
     private String name;
 
     private TimeSignature timeSignature;
 
     private Integer[][] contents;
-
-    public ObjectId getId() {
-        return id;
-    }
-
-    public void setId(ObjectId id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
