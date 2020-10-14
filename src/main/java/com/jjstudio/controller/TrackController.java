@@ -26,21 +26,26 @@ public class TrackController {
         track.setName(request.getName());
         track.setTimeSignature(request.getTimeSignature());
         track.setContents(request.getContents());
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        track.setUsername(request.getUsername());
+
+        Track savedTracked = trackRepository.save(track);
+
+        return new ResponseEntity<>(savedTracked.getId(), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Track> getTrackById(@PathVariable String id) {
-        return new ResponseEntity<>(trackRepository.findById(new ObjectId(id)).orElse(null), HttpStatus.OK);
+    public ResponseEntity<Track> getTrackById(@PathVariable String id, @RequestParam String username) {
+        return new ResponseEntity<>(trackRepository.findByIdAndUsername(new ObjectId(id), username), HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<Iterable<Track>> getAllTracks() {
-        return new ResponseEntity<>(trackRepository.findAll(), HttpStatus.OK);
+    public ResponseEntity<Iterable<Track>> getAllTracks(@RequestParam String username) {
+        return new ResponseEntity<>(trackRepository.findByUsername(username), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteTrack(@PathVariable String id) {
+    public ResponseEntity deleteTrack(@PathVariable String id, @RequestParam String username) {
+        Track deletedTrack = trackRepository.deleteByIdAndUsername(new ObjectId(id), username);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

@@ -16,6 +16,8 @@ public class Track {
 
     private Integer[][] contents;
 
+    private String username;
+
     public ObjectId getId() {
         return id;
     }
@@ -46,6 +48,14 @@ public class Track {
 
     public void setContents(Integer[][] contents) {
         this.contents = contents;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
 }
