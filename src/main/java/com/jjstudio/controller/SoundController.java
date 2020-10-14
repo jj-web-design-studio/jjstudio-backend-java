@@ -22,16 +22,17 @@ public class SoundController {
 
     private final Logger logger = LoggerFactory.getLogger(SoundController.class);
 
-    public static final String SOUNDS_SWAGGER_GROUP_NAME = "Sounds";
-
     @Autowired
     private SoundRepository soundRepository;
 
     @PostMapping
-    public ResponseEntity saveSound(@RequestParam("file") MultipartFile multipartFile, @RequestParam("name") String name, @RequestParam("username") String username) {
+    public ResponseEntity saveSound(@RequestParam("file") MultipartFile multipartFile,
+                                    @RequestParam("name") String name,
+                                    @RequestParam("username") String username) {
         if (multipartFile.getSize() > 15000000) {   // 15MB
             return new ResponseEntity<>("The file is too large. The maximum file size allowed is 15MB.", HttpStatus.BAD_REQUEST);
         }
+
         try {
             Sound sound = new Sound();
             sound.setDefault(false);
@@ -43,23 +44,30 @@ public class SoundController {
             logger.error("An error occurred while reading MultipartFile object", e);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Sound> getSoundById(@PathVariable String id) {
-        return new ResponseEntity<>(soundRepository.findById(new ObjectId(id)).orElse(null), HttpStatus.OK);
+    public ResponseEntity<Sound> getSoundByIdAndUser(@PathVariable String id,
+                                                     @RequestParam String username) {
+        return new ResponseEntity<>(soundRepository.findByIdAndUsername(new ObjectId(id), username), HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<Iterable<Sound>> getAllSounds() {
-        return new ResponseEntity<>(soundRepository.findAll(), HttpStatus.OK);
+    public ResponseEntity<Iterable<Sound>> getAllSoundsForUser(@RequestParam String username) {
+        return new ResponseEntity<>(soundRepository.findByUsername(username), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteSound(@PathVariable String id) {
-        soundRepository.deleteById(new ObjectId(id));
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public ResponseEntity deleteSoundByIdAndUser(@PathVariable String id,
+                                                 @RequestParam String username) {
+        Sound sound = soundRepository.deleteByIdAndUsername(new ObjectId(id), username);
+        if (sound.getId() != null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>("ObjectId " + sound.getId() + " does not match any user with username " + username, HttpStatus.BAD_REQUEST);
+        }
     }
 
 }
