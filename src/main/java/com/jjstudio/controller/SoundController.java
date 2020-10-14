@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 /**
+ * Rest controller for Sound entity
  * @author justinchung
  * @version 1.0
  * @since 1.0

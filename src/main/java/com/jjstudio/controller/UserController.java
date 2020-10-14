@@ -16,6 +16,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 
+/**
+ * Rest controller for User entity
+ * @author justinchung
+ * @version 1.0
+ * @since 1.0
+ */
 @RestController
 @RequestMapping("/users")
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -23,17 +29,22 @@ public class UserController {
 
     private final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    public static final String USERS_SWAGGER_GROUP_NAME = "Users";
-
     @Autowired
     private UserRepository userRepository;
 
+    /**
+     * Create a user. The following fields are expected to be unique:
+     * - username
+     * - email
+     * @param request   payload containing user information
+     * @return
+     */
     @PostMapping
     public ResponseEntity createUser(@RequestBody CreateUserRequest request) {
         if (emailAlreadyExists(request.getEmail())) {
-            return new ResponseEntity<>(new CreateUserErrorResponse(request.getEmail()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new CreateUserErrorResponse("A user with email " + request.getEmail() + " already exists."), HttpStatus.BAD_REQUEST);
         } else if (userNameAlreadyExists(request.getUserName())) {
-            return new ResponseEntity<>("The user with userName " + request.getUserName() + " already exists.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("A user with username " + request.getUserName() + " already exists.", HttpStatus.BAD_REQUEST);
         }
 
         User user = new User();
@@ -49,19 +60,10 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    private boolean userNameAlreadyExists(String userName) {
-        User existingUser = userRepository.findByUserName(userName);
-        return existingUser != null;
-    }
-
-    private boolean emailAlreadyExists(String email) {
-        User existingUser = userRepository.findByEmail(email);
-        return existingUser != null;
-    }
-
     @GetMapping
     public ResponseEntity<Iterable<User>> getAllUsers() {
         return new ResponseEntity<>(userRepository.findAll(), HttpStatus.OK);
+        // Not sure if this endpoint is needed
     }
 
     @GetMapping("/{id}")
@@ -69,6 +71,13 @@ public class UserController {
         return new ResponseEntity<>(userRepository.findById(new ObjectId(id)).orElseThrow(() -> new UserNotFoundException(id)), HttpStatus.OK);
     }
 
+    /**
+     * Update a user's information.
+     * @param id        ObjectId, as a String
+     * @param request   user information to be updated
+     * @return
+     * @throws UserNotFoundException if ObjectId is not found
+     */
     @PutMapping("/{id}")
     public ResponseEntity updateUser(@PathVariable String id, @RequestBody UpdateUserRequest request) throws UserNotFoundException {
         User user = userRepository.findById(new ObjectId(id)).orElseThrow(() -> new UserNotFoundException(id));
@@ -84,10 +93,25 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    /**
+     * Delete a user given the ObjectId
+     * @param id    ObjectId, as a String
+     * @return
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity deleteUser(@PathVariable String id) {
         userRepository.deleteById(new ObjectId(id));
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    private boolean userNameAlreadyExists(String userName) {
+        User existingUser = userRepository.findByUserName(userName);
+        return existingUser != null;
+    }
+
+    private boolean emailAlreadyExists(String email) {
+        User existingUser = userRepository.findByEmail(email);
+        return existingUser != null;
     }
 
 }
