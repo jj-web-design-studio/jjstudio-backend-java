@@ -44,7 +44,7 @@ public class UserController {
         if (emailAlreadyExists(request.getEmail())) {
             return new ResponseEntity<>(new CreateUserErrorResponse("A user with email " + request.getEmail() + " already exists."), HttpStatus.BAD_REQUEST);
         } else if (userNameAlreadyExists(request.getUserName())) {
-            return new ResponseEntity<>("A user with username " + request.getUserName() + " already exists.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new CreateUserErrorResponse("A user with username " + request.getUserName() + " already exists."), HttpStatus.BAD_REQUEST);
         }
 
         User user = new User();
