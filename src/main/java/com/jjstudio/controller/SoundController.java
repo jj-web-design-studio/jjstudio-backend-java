@@ -2,6 +2,7 @@ package com.jjstudio.controller;
 
 import com.jjstudio.model.Sound;
 import com.jjstudio.resource.SoundRepository;
+import io.swagger.annotations.ApiOperation;
 import org.bson.BsonBinarySubType;
 import org.bson.types.Binary;
 import org.bson.types.ObjectId;
@@ -31,15 +32,7 @@ public class SoundController {
     @Autowired
     private SoundRepository soundRepository;
 
-    /**
-     * Save a sound file that cannot be larger than 15MB. This is a strict limit
-     * from MongoDB asa single document can only be 16MB large. 1MB is left for
-     * other potential fields.
-     * @param multipartFile file to be converted to base64 for storage
-     * @param name          name of sound file determined by the user
-     * @param username      username
-     * @return              HTTP response code representing success/fail
-     */
+    @ApiOperation(value = "Upload and save a sound", notes = "${SoundController.saveSound.notes}")
     @PostMapping
     public ResponseEntity saveSound(@RequestParam("file") MultipartFile multipartFile,
                                     @RequestParam("name") String name,
@@ -63,37 +56,20 @@ public class SoundController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    /**
-     * Fetch a sound based on ObjectId and username. A sound can only be read by
-     * the user that uploaded it.
-     * @param id        ObjectId, as a string
-     * @param username  username
-     * @return          single sound
-     */
+    @ApiOperation(value = "Get a sound", notes = "${SoundController.getSoundByIdAndUser.notes}")
     @GetMapping("/{id}")
     public ResponseEntity<Sound> getSoundByIdAndUser(@PathVariable String id,
                                                      @RequestParam String username) {
         return new ResponseEntity<>(soundRepository.findByIdAndUsername(new ObjectId(id), username), HttpStatus.OK);
     }
 
-    /**
-     * Get all sounds associated with a given username. A sound can only be read
-     * by the user that uploaded it.
-     * @param username  username
-     * @return          list of sounds
-     */
+    @ApiOperation(value = "Get all sounds for a user", notes = "${SoundController.getAllSoundsForUser.notes}")
     @GetMapping
     public ResponseEntity<Iterable<Sound>> getAllSoundsForUser(@RequestParam String username) {
         return new ResponseEntity<>(soundRepository.findByUsername(username), HttpStatus.OK);
     }
 
-    /**
-     * Delete a single sound associated with a given ObjectId and username. A
-     * sound can only be deleted by the user that uploaded it.
-     * @param id        ObjectId, as a string
-     * @param username  username
-     * @return          ObjectId of deleted sound
-     */
+    @ApiOperation(value = "Delete a sound", notes = "${SoundController.deleteSoundByIdAndUser.notes}")
     @DeleteMapping("/{id}")
     public ResponseEntity deleteSoundByIdAndUser(@PathVariable String id,
                                                  @RequestParam String username) {

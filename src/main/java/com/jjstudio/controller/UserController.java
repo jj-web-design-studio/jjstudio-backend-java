@@ -6,6 +6,7 @@ import com.jjstudio.dto.user.CreateUserErrorResponse;
 import com.jjstudio.exception.UserNotFoundException;
 import com.jjstudio.resource.UserRepository;
 import com.jjstudio.model.User;
+import io.swagger.annotations.ApiOperation;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,13 +33,7 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    /**
-     * Create a user. The following fields are expected to be unique:
-     * - username
-     * - email
-     * @param request   payload containing user information
-     * @return
-     */
+    @ApiOperation(value = "Create a new user", notes = "${UserController.createUser.notes}")
     @PostMapping
     public ResponseEntity createUser(@RequestBody CreateUserRequest request) {
         if (emailAlreadyExists(request.getEmail())) {
@@ -66,18 +61,13 @@ public class UserController {
         // Not sure if this endpoint is needed
     }
 
+    @ApiOperation(value = "Get user information", notes = "${UserController.getUser.notes}")
     @GetMapping("/{id}")
     public ResponseEntity<User> getUser(@PathVariable String id) throws UserNotFoundException {
         return new ResponseEntity<>(userRepository.findById(new ObjectId(id)).orElseThrow(() -> new UserNotFoundException(id)), HttpStatus.OK);
     }
 
-    /**
-     * Update a user's information.
-     * @param id        ObjectId, as a String
-     * @param request   user information to be updated
-     * @return
-     * @throws UserNotFoundException if ObjectId is not found
-     */
+    @ApiOperation(value = "Update user information", notes = "${UserController.updateUser.notes}")
     @PutMapping("/{id}")
     public ResponseEntity updateUser(@PathVariable String id, @RequestBody UpdateUserRequest request) throws UserNotFoundException {
         User user = userRepository.findById(new ObjectId(id)).orElseThrow(() -> new UserNotFoundException(id));
@@ -93,11 +83,7 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    /**
-     * Delete a user given the ObjectId
-     * @param id    ObjectId, as a String
-     * @return
-     */
+    @ApiOperation(value = "Delete a user", notes = "${UserController.deleteUser.notes}")
     @DeleteMapping("/{id}")
     public ResponseEntity deleteUser(@PathVariable String id) {
         userRepository.deleteById(new ObjectId(id));
