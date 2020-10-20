@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Rest controller for Sound entity
@@ -41,19 +43,21 @@ public class SoundController {
             return new ResponseEntity<>("The file is too large. The maximum file size allowed is 15MB.", HttpStatus.BAD_REQUEST);
         }
 
+        Sound savedSound;
+
         try {
             Sound sound = new Sound();
             sound.setDefault(false);
             sound.setName(name);
             sound.setFile(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
             sound.setUsername(username);
-            soundRepository.save(sound);
+            savedSound = soundRepository.save(sound);
         } catch (IOException e) {
             logger.error("An error occurred while reading MultipartFile object", e);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(savedSound.getId().toHexString(), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Get a sound", notes = "${SoundController.getSoundByIdAndUser.notes}")
@@ -65,7 +69,17 @@ public class SoundController {
 
     @ApiOperation(value = "Get all sounds for a user", notes = "${SoundController.getAllSoundsForUser.notes}")
     @GetMapping
-    public ResponseEntity<Iterable<Sound>> getAllSoundsForUser(@RequestParam String username) {
+    public ResponseEntity<Iterable<Sound>> getAllSoundsForUser(@RequestParam String username,
+                                                               @RequestParam(value = "ids", required = false) List<String> ids) {
+        if (ids != null && ids.size() > 0) {
+            logger.info("id list is not null");
+            List<ObjectId> objectIds = new ArrayList<>();
+            for (String id : ids) {
+                ObjectId objectId = new ObjectId(id);
+                objectIds.add(objectId);
+            }
+            return new ResponseEntity<>(soundRepository.findAllById(objectIds), HttpStatus.OK);
+        }
         return new ResponseEntity<>(soundRepository.findByUsername(username), HttpStatus.OK);
     }
 

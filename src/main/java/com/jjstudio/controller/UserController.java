@@ -50,9 +50,9 @@ public class UserController {
         user.setPassword(request.getPassword());
         user.setDateJoined(new Timestamp(System.currentTimeMillis()));
 
-        userRepository.save(user);
+        User savedUser = userRepository.save(user);
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(savedUser.getId().toHexString(), HttpStatus.CREATED);
     }
 
     @GetMapping

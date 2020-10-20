@@ -12,6 +12,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Rest controller for Track entity
+ * @author justinchung
+ * @version 1.0
+ * @since 1.0
+ */
 @RestController
 @RequestMapping("/tracks")
 public class TrackController {
@@ -32,7 +38,7 @@ public class TrackController {
 
         Track savedTracked = trackRepository.save(track);
 
-        return new ResponseEntity<>(savedTracked.getId(), HttpStatus.CREATED);
+        return new ResponseEntity<>(savedTracked.getId().toHexString(), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Get a track", notes = "${TrackController.getTrackByUserAndId.notes}")
