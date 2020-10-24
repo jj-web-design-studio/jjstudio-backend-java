@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
@@ -38,16 +39,15 @@ public class UserController {
     public ResponseEntity createUser(@RequestBody CreateUserRequest request) {
         if (emailAlreadyExists(request.getEmail())) {
             return new ResponseEntity<>(new CreateUserErrorResponse("A user with email " + request.getEmail() + " already exists."), HttpStatus.BAD_REQUEST);
-        } else if (userNameAlreadyExists(request.getUserName())) {
-            return new ResponseEntity<>(new CreateUserErrorResponse("A user with username " + request.getUserName() + " already exists."), HttpStatus.BAD_REQUEST);
         }
+
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
         User user = new User();
         user.setEmail(request.getEmail());
-        user.setUserName(request.getUserName());
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
-        user.setPassword(request.getPassword());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setDateJoined(new Timestamp(System.currentTimeMillis()));
 
         User savedUser = userRepository.save(user);
@@ -76,7 +76,6 @@ public class UserController {
         user.setPassword(request.getPassword() != null ? request.getPassword() : user.getPassword());
         user.setFirstName(request.getFirstName() != null ? request.getFirstName() : user.getFirstName());
         user.setLastName(request.getLastName() != null ? request.getLastName() : user.getLastName());
-        user.setUserName(request.getUserName() != null ? request.getUserName() : user.getUserName());
 
         userRepository.save(user);
 
@@ -88,11 +87,6 @@ public class UserController {
     public ResponseEntity deleteUser(@PathVariable String id) {
         userRepository.deleteById(new ObjectId(id));
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    private boolean userNameAlreadyExists(String userName) {
-        User existingUser = userRepository.findByUserName(userName);
-        return existingUser != null;
     }
 
     private boolean emailAlreadyExists(String email) {

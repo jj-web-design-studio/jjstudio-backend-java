@@ -23,19 +23,18 @@ public class User {
 
     private String lastName;
 
-    private String userName;
+    private String role;
 
     public User() {
     }
 
-    public User(ObjectId id, String email, String password, Date dateJoined, String firstName, String lastName, String userName) {
+    public User(ObjectId id, String email, String password, Date dateJoined, String firstName, String lastName) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.dateJoined = dateJoined;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.userName = userName;
     }
 
     public ObjectId getId() {
@@ -86,12 +85,11 @@ public class User {
         this.lastName = lastName;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getRole() {
+        return role;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setRole(String role) {
+        this.role = role;
     }
-
 }
