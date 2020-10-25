@@ -6,6 +6,7 @@ import com.jjstudio.dto.user.CreateUserErrorResponse;
 import com.jjstudio.exception.UserNotFoundException;
 import com.jjstudio.resource.UserRepository;
 import com.jjstudio.model.User;
+import com.jjstudio.util.RoleEnum;
 import io.swagger.annotations.ApiOperation;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
@@ -13,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
@@ -34,6 +35,9 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @ApiOperation(value = "Create a new user", notes = "${UserController.createUser.notes}")
     @PostMapping
     public ResponseEntity createUser(@RequestBody CreateUserRequest request) {
@@ -41,14 +45,13 @@ public class UserController {
             return new ResponseEntity<>(new CreateUserErrorResponse("A user with email " + request.getEmail() + " already exists."), HttpStatus.BAD_REQUEST);
         }
 
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
         User user = new User();
         user.setEmail(request.getEmail());
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setDateJoined(new Timestamp(System.currentTimeMillis()));
+        user.setRole(RoleEnum.FREE_USER.toString());
 
         User savedUser = userRepository.save(user);
 
@@ -56,7 +59,7 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<Iterable<User>> getAllUsers() {
+    public ResponseEntity<Iterable<User>> getAllUsers(@RequestParam(required = false) String email) {
         return new ResponseEntity<>(userRepository.findAll(), HttpStatus.OK);
         // Not sure if this endpoint is needed
     }
