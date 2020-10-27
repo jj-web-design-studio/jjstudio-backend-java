@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
  * @since 1.0
  */
 @RestController
-@RequestMapping("/tracks")
+@RequestMapping("/v1/me/tracks")
 public class TrackController {
 
     private final Logger logger = LoggerFactory.getLogger(TrackController.class);
@@ -27,7 +27,7 @@ public class TrackController {
     @Autowired
     private TrackRepository trackRepository;
 
-    @ApiOperation(value = "Save a track", notes = "${TrackController.saveTrack.notes}")
+    @ApiOperation(value = "Save a track for current user", notes = "${TrackController.saveTrack.notes}")
     @PostMapping
     public ResponseEntity saveTrack(@RequestBody SaveTrackRequest request) {
         Track track = new Track();
@@ -41,19 +41,19 @@ public class TrackController {
         return new ResponseEntity<>(savedTracked.getId().toHexString(), HttpStatus.CREATED);
     }
 
-    @ApiOperation(value = "Get a track", notes = "${TrackController.getTrackByUserAndId.notes}")
+    @ApiOperation(value = "Get a track for current user", notes = "${TrackController.getTrackByUserAndId.notes}")
     @GetMapping("/{id}")
     public ResponseEntity<Track> getTrackByUserAndId(@PathVariable String id, @RequestParam String username) {
         return new ResponseEntity<>(trackRepository.findByIdAndUsername(new ObjectId(id), username), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Get all tracks for user", notes = "${TrackController.getAllTracksForUser.notes}")
+    @ApiOperation(value = "Get all tracks for current user", notes = "${TrackController.getAllTracksForUser.notes}")
     @GetMapping
     public ResponseEntity<Iterable<Track>> getAllTracksForUser(@RequestParam String username) {
         return new ResponseEntity<>(trackRepository.findByUsername(username), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Delete a track", notes = "${TrackController.deleteTrackByUserAndId.notes}")
+    @ApiOperation(value = "Delete a track for current user", notes = "${TrackController.deleteTrackByUserAndId.notes}")
     @DeleteMapping("/{id}")
     public ResponseEntity deleteTrackByUserAndId(@PathVariable String id, @RequestParam String username) {
         Track deletedTrack = trackRepository.deleteByIdAndUsername(new ObjectId(id), username);

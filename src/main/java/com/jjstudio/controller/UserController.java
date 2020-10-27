@@ -26,7 +26,7 @@ import java.sql.Timestamp;
  * @since 1.0
  */
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/v1/users")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class UserController {
 
@@ -79,6 +79,14 @@ public class UserController {
         user.setPassword(request.getPassword() != null ? request.getPassword() : user.getPassword());
         user.setFirstName(request.getFirstName() != null ? request.getFirstName() : user.getFirstName());
         user.setLastName(request.getLastName() != null ? request.getLastName() : user.getLastName());
+        if (request.getRole() != null) {
+            try {
+                user.setRole(RoleEnum.valueOf(request.getRole()).toString());
+            } catch (IllegalArgumentException e) {
+                return new ResponseEntity<>("Invalid role type.", HttpStatus.BAD_REQUEST);
+            }
+        }
+        user.setRole(request.getRole() != null ? request.getRole() : user.getRole());
 
         userRepository.save(user);
 
