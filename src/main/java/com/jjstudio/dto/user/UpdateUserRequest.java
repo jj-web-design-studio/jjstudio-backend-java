@@ -9,7 +9,7 @@ public class UpdateUserRequest {
 
     private String lastName;
 
-    private String userName;
+    private String role;
 
     public String getEmail() {
         return email;
@@ -43,11 +43,11 @@ public class UpdateUserRequest {
         this.lastName = lastName;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getRole() {
+        return role;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setRole(String role) {
+        this.role = role;
     }
 }
