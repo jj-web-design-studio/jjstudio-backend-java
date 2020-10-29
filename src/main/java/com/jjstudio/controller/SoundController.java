@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,19 +40,21 @@ public class SoundController {
     @PostMapping
     public ResponseEntity saveSound(@RequestParam("file") MultipartFile multipartFile,
                                     @RequestParam("name") String name,
-                                    @RequestParam("username") String username) {
+                                    Authentication authentication) {
         if (multipartFile.getSize() > 15000000) {   // 15MB
             return new ResponseEntity<>("The file is too large. The maximum file size allowed is 15MB.", HttpStatus.BAD_REQUEST);
         }
 
         Sound savedSound;
 
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
         try {
             Sound sound = new Sound();
             sound.setDefault(false);
             sound.setName(name);
             sound.setFile(new Binary(BsonBinarySubType.BINARY, multipartFile.getBytes()));
-            sound.setUsername(username);
+            sound.setUsername(userDetails.getUsername());
             savedSound = soundRepository.save(sound);
         } catch (IOException e) {
             logger.error("An error occurred while reading MultipartFile object", e);
@@ -63,14 +67,17 @@ public class SoundController {
     @ApiOperation(value = "Get a sound for current user", notes = "${SoundController.getSoundByIdAndUser.notes}")
     @GetMapping("/{id}")
     public ResponseEntity<Sound> getSoundByIdAndUser(@PathVariable String id,
-                                                     @RequestParam String username) {
-        return new ResponseEntity<>(soundRepository.findByIdAndUsername(new ObjectId(id), username), HttpStatus.OK);
+                                                     Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        return new ResponseEntity<>(soundRepository.findByIdAndUsername(new ObjectId(id), userDetails.getUsername()), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Get all sounds for current user", notes = "${SoundController.getAllSoundsForUser.notes}")
     @GetMapping
-    public ResponseEntity<Iterable<Sound>> getAllSoundsForUser(@RequestParam String username,
-                                                               @RequestParam(value = "ids", required = false) List<String> ids) {
+    public ResponseEntity<Iterable<Sound>> getAllSoundsForUser(@RequestParam(value = "ids", required = false) List<String> ids,
+                                                               Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
         if (ids != null && ids.size() > 0) {
             logger.info("id list is not null");
             List<ObjectId> objectIds = new ArrayList<>();
@@ -80,18 +87,20 @@ public class SoundController {
             }
             return new ResponseEntity<>(soundRepository.findAllById(objectIds), HttpStatus.OK);
         }
-        return new ResponseEntity<>(soundRepository.findByUsername(username), HttpStatus.OK);
+        return new ResponseEntity<>(soundRepository.findByUsername(userDetails.getUsername()), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Delete a sound for current user", notes = "${SoundController.deleteSoundByIdAndUser.notes}")
     @DeleteMapping("/{id}")
     public ResponseEntity deleteSoundByIdAndUser(@PathVariable String id,
-                                                 @RequestParam String username) {
-        Sound sound = soundRepository.deleteByIdAndUsername(new ObjectId(id), username);
+                                                 Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        Sound sound = soundRepository.deleteByIdAndUsername(new ObjectId(id), userDetails.getUsername());
         if (sound.getId() != null) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(sound.getId(), HttpStatus.NO_CONTENT);
         } else {
-            return new ResponseEntity<>("ObjectId " + sound.getId() + " does not match any user with username " + username, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("ObjectId " + id + " does not match any user with username " + userDetails.getUsername(), HttpStatus.BAD_REQUEST);
         }
     }
 
