@@ -98,7 +98,7 @@ public class SoundController {
 
         Sound sound = soundRepository.deleteByIdAndUsername(new ObjectId(id), userDetails.getUsername());
         if (sound.getId() != null) {
-            return new ResponseEntity<>(sound.getId(), HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(sound.getId().toHexString(), HttpStatus.NO_CONTENT);
         } else {
             return new ResponseEntity<>("ObjectId " + id + " does not match any user with username " + userDetails.getUsername(), HttpStatus.BAD_REQUEST);
         }

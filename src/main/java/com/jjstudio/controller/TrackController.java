@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -29,12 +31,15 @@ public class TrackController {
 
     @ApiOperation(value = "Save a track for current user", notes = "${TrackController.saveTrack.notes}")
     @PostMapping
-    public ResponseEntity saveTrack(@RequestBody SaveTrackRequest request) {
+    public ResponseEntity saveTrack(@RequestBody SaveTrackRequest request,
+                                    Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
         Track track = new Track();
         track.setName(request.getName());
         track.setTimeSignature(request.getTimeSignature());
         track.setContents(request.getContents());
-        track.setUsername(request.getUsername());
+        track.setUsername(userDetails.getUsername());
 
         Track savedTracked = trackRepository.save(track);
 
@@ -43,21 +48,29 @@ public class TrackController {
 
     @ApiOperation(value = "Get a track for current user", notes = "${TrackController.getTrackByUserAndId.notes}")
     @GetMapping("/{id}")
-    public ResponseEntity<Track> getTrackByUserAndId(@PathVariable String id, @RequestParam String username) {
-        return new ResponseEntity<>(trackRepository.findByIdAndUsername(new ObjectId(id), username), HttpStatus.OK);
+    public ResponseEntity<Track> getTrackByUserAndId(@PathVariable String id,
+                                                     Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        return new ResponseEntity<>(trackRepository.findByIdAndUsername(new ObjectId(id), userDetails.getUsername()), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Get all tracks for current user", notes = "${TrackController.getAllTracksForUser.notes}")
     @GetMapping
-    public ResponseEntity<Iterable<Track>> getAllTracksForUser(@RequestParam String username) {
-        return new ResponseEntity<>(trackRepository.findByUsername(username), HttpStatus.OK);
+    public ResponseEntity<Iterable<Track>> getAllTracksForUser(Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        return new ResponseEntity<>(trackRepository.findByUsername(userDetails.getUsername()), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Delete a track for current user", notes = "${TrackController.deleteTrackByUserAndId.notes}")
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteTrackByUserAndId(@PathVariable String id, @RequestParam String username) {
-        Track deletedTrack = trackRepository.deleteByIdAndUsername(new ObjectId(id), username);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public ResponseEntity deleteTrackByUserAndId(@PathVariable String id,
+                                                 Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        Track deletedTrack = trackRepository.deleteByIdAndUsername(new ObjectId(id), userDetails.getUsername());
+        return new ResponseEntity<>(deletedTrack.getId().toHexString(), HttpStatus.NO_CONTENT);
     }
 
 }
