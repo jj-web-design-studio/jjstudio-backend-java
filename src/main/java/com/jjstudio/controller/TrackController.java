@@ -31,7 +31,7 @@ public class TrackController {
 
     @ApiOperation(value = "Save a track", notes = "${TrackController.createTrack.notes}")
     @PostMapping
-    public ResponseEntity createTrack(@RequestBody SaveTrackRequest request,
+    public ResponseEntity<String> createTrack(@RequestBody SaveTrackRequest request,
                                     Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
@@ -65,12 +65,12 @@ public class TrackController {
 
     @ApiOperation(value = "Delete a track", notes = "${TrackController.deleteTrackById.notes}")
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteTrackById(@PathVariable String id,
+    public ResponseEntity<String> deleteTrackById(@PathVariable String id,
                                           Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         Track deletedTrack = trackRepository.deleteByIdAndUsername(new ObjectId(id), userDetails.getUsername());
-        return new ResponseEntity<>(deletedTrack.getId().toHexString(), HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(deletedTrack.getId().toHexString(), HttpStatus.OK);
     }
 
 }

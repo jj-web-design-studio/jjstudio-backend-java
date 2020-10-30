@@ -38,7 +38,7 @@ public class SoundController {
 
     @ApiOperation(value = "Create a sound", notes = "${SoundController.createSound.notes}")
     @PostMapping
-    public ResponseEntity createSound(@RequestParam("file") MultipartFile multipartFile,
+    public ResponseEntity<String> createSound(@RequestParam("file") MultipartFile multipartFile,
                                       @RequestParam("name") String name,
                                       Authentication authentication) {
         if (multipartFile.getSize() > 15000000) {   // 15MB
@@ -92,13 +92,13 @@ public class SoundController {
 
     @ApiOperation(value = "Delete a sound", notes = "${SoundController.deleteSoundById.notes}")
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteSoundById(@PathVariable String id,
+    public ResponseEntity<String> deleteSoundById(@PathVariable String id,
                                           Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         Sound sound = soundRepository.deleteByIdAndUsername(new ObjectId(id), userDetails.getUsername());
         if (sound.getId() != null) {
-            return new ResponseEntity<>(sound.getId().toHexString(), HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(sound.getId().toHexString(), HttpStatus.OK);
         } else {
             return new ResponseEntity<>("ObjectId " + id + " does not match any user with username " + userDetails.getUsername(), HttpStatus.BAD_REQUEST);
         }
