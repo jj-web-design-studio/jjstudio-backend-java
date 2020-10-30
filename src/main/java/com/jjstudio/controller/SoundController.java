@@ -38,9 +38,9 @@ public class SoundController {
 
     @ApiOperation(value = "Upload and save a sound for current user", notes = "${SoundController.saveSound.notes}")
     @PostMapping
-    public ResponseEntity saveSound(@RequestParam("file") MultipartFile multipartFile,
-                                    @RequestParam("name") String name,
-                                    Authentication authentication) {
+    public ResponseEntity createSound(@RequestParam("file") MultipartFile multipartFile,
+                                      @RequestParam("name") String name,
+                                      Authentication authentication) {
         if (multipartFile.getSize() > 15000000) {   // 15MB
             return new ResponseEntity<>("The file is too large. The maximum file size allowed is 15MB.", HttpStatus.BAD_REQUEST);
         }
@@ -66,16 +66,16 @@ public class SoundController {
 
     @ApiOperation(value = "Get a sound for current user", notes = "${SoundController.getSoundByIdAndUser.notes}")
     @GetMapping("/{id}")
-    public ResponseEntity<Sound> getSoundByIdAndUser(@PathVariable String id,
-                                                     Authentication authentication) {
+    public ResponseEntity<Sound> getSoundById(@PathVariable String id,
+                                              Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         return new ResponseEntity<>(soundRepository.findByIdAndUsername(new ObjectId(id), userDetails.getUsername()), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Get all sounds for current user", notes = "${SoundController.getAllSoundsForUser.notes}")
     @GetMapping
-    public ResponseEntity<Iterable<Sound>> getAllSoundsForUser(@RequestParam(value = "ids", required = false) List<String> ids,
-                                                               Authentication authentication) {
+    public ResponseEntity<Iterable<Sound>> getAllSounds(@RequestParam(value = "ids", required = false) List<String> ids,
+                                                        Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         if (ids != null && ids.size() > 0) {
@@ -92,8 +92,8 @@ public class SoundController {
 
     @ApiOperation(value = "Delete a sound for current user", notes = "${SoundController.deleteSoundByIdAndUser.notes}")
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteSoundByIdAndUser(@PathVariable String id,
-                                                 Authentication authentication) {
+    public ResponseEntity deleteSoundById(@PathVariable String id,
+                                          Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         Sound sound = soundRepository.deleteByIdAndUsername(new ObjectId(id), userDetails.getUsername());

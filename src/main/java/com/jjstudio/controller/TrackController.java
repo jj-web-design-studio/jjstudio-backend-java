@@ -31,7 +31,7 @@ public class TrackController {
 
     @ApiOperation(value = "Save a track for current user", notes = "${TrackController.saveTrack.notes}")
     @PostMapping
-    public ResponseEntity saveTrack(@RequestBody SaveTrackRequest request,
+    public ResponseEntity createTrack(@RequestBody SaveTrackRequest request,
                                     Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
@@ -48,8 +48,8 @@ public class TrackController {
 
     @ApiOperation(value = "Get a track for current user", notes = "${TrackController.getTrackByUserAndId.notes}")
     @GetMapping("/{id}")
-    public ResponseEntity<Track> getTrackByUserAndId(@PathVariable String id,
-                                                     Authentication authentication) {
+    public ResponseEntity<Track> getTrackById(@PathVariable String id,
+                                              Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         return new ResponseEntity<>(trackRepository.findByIdAndUsername(new ObjectId(id), userDetails.getUsername()), HttpStatus.OK);
@@ -57,7 +57,7 @@ public class TrackController {
 
     @ApiOperation(value = "Get all tracks for current user", notes = "${TrackController.getAllTracksForUser.notes}")
     @GetMapping
-    public ResponseEntity<Iterable<Track>> getAllTracksForUser(Authentication authentication) {
+    public ResponseEntity<Iterable<Track>> getAllTracks(Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         return new ResponseEntity<>(trackRepository.findByUsername(userDetails.getUsername()), HttpStatus.OK);
@@ -65,8 +65,8 @@ public class TrackController {
 
     @ApiOperation(value = "Delete a track for current user", notes = "${TrackController.deleteTrackByUserAndId.notes}")
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteTrackByUserAndId(@PathVariable String id,
-                                                 Authentication authentication) {
+    public ResponseEntity deleteTrackById(@PathVariable String id,
+                                          Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         Track deletedTrack = trackRepository.deleteByIdAndUsername(new ObjectId(id), userDetails.getUsername());
