@@ -58,12 +58,6 @@ public class UserController {
         return new ResponseEntity<>(savedUser.getId().toHexString(), HttpStatus.CREATED);
     }
 
-    @GetMapping
-    public ResponseEntity<Iterable<User>> getAllUsers(@RequestParam(required = false) String email) {
-        return new ResponseEntity<>(userRepository.findAll(), HttpStatus.OK);
-        // Not sure if this endpoint is needed
-    }
-
     @ApiOperation(value = "Get user information", notes = "${UserController.getUser.notes}")
     @GetMapping("/{id}")
     public ResponseEntity<User> getUser(@PathVariable String id) throws UserNotFoundException {
