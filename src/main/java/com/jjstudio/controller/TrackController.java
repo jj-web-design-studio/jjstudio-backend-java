@@ -29,7 +29,7 @@ public class TrackController {
     @Autowired
     private TrackRepository trackRepository;
 
-    @ApiOperation(value = "Save a track for current user", notes = "${TrackController.createTrack.notes}")
+    @ApiOperation(value = "Save a track", notes = "${TrackController.createTrack.notes}")
     @PostMapping
     public ResponseEntity createTrack(@RequestBody SaveTrackRequest request,
                                     Authentication authentication) {
@@ -46,7 +46,7 @@ public class TrackController {
         return new ResponseEntity<>(savedTracked.getId().toHexString(), HttpStatus.CREATED);
     }
 
-    @ApiOperation(value = "Get a track for current user", notes = "${TrackController.getTrackById.notes}")
+    @ApiOperation(value = "Get a track", notes = "${TrackController.getTrackById.notes}")
     @GetMapping("/{id}")
     public ResponseEntity<Track> getTrackById(@PathVariable String id,
                                               Authentication authentication) {
@@ -55,7 +55,7 @@ public class TrackController {
         return new ResponseEntity<>(trackRepository.findByIdAndUsername(new ObjectId(id), userDetails.getUsername()), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Get all tracks for current user", notes = "${TrackController.getAllTracks.notes}")
+    @ApiOperation(value = "Get all tracks", notes = "${TrackController.getAllTracks.notes}")
     @GetMapping
     public ResponseEntity<Iterable<Track>> getAllTracks(Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -63,7 +63,7 @@ public class TrackController {
         return new ResponseEntity<>(trackRepository.findByUsername(userDetails.getUsername()), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Delete a track for current user", notes = "${TrackController.deleteTrackById.notes}")
+    @ApiOperation(value = "Delete a track", notes = "${TrackController.deleteTrackById.notes}")
     @DeleteMapping("/{id}")
     public ResponseEntity deleteTrackById(@PathVariable String id,
                                           Authentication authentication) {
