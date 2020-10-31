@@ -3,6 +3,7 @@ package com.jjstudio.controller;
 import com.jjstudio.dto.keyboard.CreateKeyboardRequest;
 import com.jjstudio.model.Keyboard;
 import com.jjstudio.resource.KeyboardRepository;
+import com.jjstudio.util.Keys;
 import io.swagger.annotations.ApiOperation;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
@@ -13,6 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Rest controller for Keyboard entity
@@ -34,6 +38,10 @@ public class KeyboardController {
     @PostMapping
     public ResponseEntity<String> createKeyboard(@RequestBody CreateKeyboardRequest request,
                                                  Authentication authentication) {
+        if (!isValidCreateKeyboardMapping(request.getMapping())) {
+            return new ResponseEntity<>("Invalid keyboard mapping configuration", HttpStatus.BAD_REQUEST);
+        }
+
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         Keyboard keyboard = new Keyboard();
@@ -74,4 +82,17 @@ public class KeyboardController {
         return new ResponseEntity<>(deletedKeyboard.getId().toHexString(), HttpStatus.OK);
     }
 
+    private boolean isValidCreateKeyboardMapping(Map<String, String> mapping) {
+        Map<String, Boolean> visited = new HashMap<>();
+        for (String keyCode : mapping.keySet()) {
+            if (visited.get(keyCode)) {
+                return false;
+            }
+            if (!Keys.exists(Integer.parseInt(keyCode))) {
+                return false;
+            }
+            visited.put(keyCode, true);
+        }
+        return true;
+    }
 }
