@@ -58,15 +58,15 @@ public class UserController {
         return new ResponseEntity<>(savedUser.getId().toHexString(), HttpStatus.CREATED);
     }
 
-    @ApiOperation(value = "Get user information", notes = "${UserController.getUser.notes}")
+    @ApiOperation(value = "Get a user", notes = "${UserController.getUser.notes}")
     @GetMapping("/{id}")
     public ResponseEntity<User> getUser(@PathVariable String id) throws UserNotFoundException {
         return new ResponseEntity<>(userRepository.findById(new ObjectId(id)).orElseThrow(() -> new UserNotFoundException(id)), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Update user information", notes = "${UserController.updateUser.notes}")
+    @ApiOperation(value = "Update a user", notes = "${UserController.updateUser.notes}")
     @PutMapping("/{id}")
-    public ResponseEntity updateUser(@PathVariable String id, @RequestBody UpdateUserRequest request) throws UserNotFoundException {
+    public ResponseEntity<String> updateUser(@PathVariable String id, @RequestBody UpdateUserRequest request) throws UserNotFoundException {
         User user = userRepository.findById(new ObjectId(id)).orElseThrow(() -> new UserNotFoundException(id));
 
         user.setEmail(request.getEmail() != null ? request.getEmail() : user.getEmail());
@@ -82,14 +82,14 @@ public class UserController {
         }
         user.setRole(request.getRole() != null ? request.getRole() : user.getRole());
 
-        userRepository.save(user);
+        User updatedUser = userRepository.save(user);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(updatedUser.getId().toHexString(), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Delete a user", notes = "${UserController.deleteUser.notes}")
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteUser(@PathVariable String id) {
+    public ResponseEntity<String> deleteUser(@PathVariable String id) {
         userRepository.deleteById(new ObjectId(id));
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
