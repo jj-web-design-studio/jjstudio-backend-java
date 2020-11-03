@@ -1,6 +1,7 @@
 package com.jjstudio.util;
 
 public class TimeSignature {
+
     private Integer beat;
 
     private Integer measure;
@@ -20,4 +21,5 @@ public class TimeSignature {
     public void setMeasure(Integer measure) {
         this.measure = measure;
     }
+
 }
