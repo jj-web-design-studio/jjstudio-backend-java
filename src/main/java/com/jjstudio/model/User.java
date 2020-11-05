@@ -28,8 +28,7 @@ public class User {
     public User() {
     }
 
-    public User(ObjectId id, String email, String password, Date dateJoined, String firstName, String lastName) {
-        this.id = id;
+    public User(String email, String password, Date dateJoined, String firstName, String lastName) {
         this.email = email;
         this.password = password;
         this.dateJoined = dateJoined;

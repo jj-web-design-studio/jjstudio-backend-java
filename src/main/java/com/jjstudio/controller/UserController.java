@@ -6,7 +6,7 @@ import com.jjstudio.dto.user.CreateUserErrorResponse;
 import com.jjstudio.exception.UserNotFoundException;
 import com.jjstudio.resource.UserRepository;
 import com.jjstudio.model.User;
-import com.jjstudio.util.RoleEnum;
+import com.jjstudio.util.Role;
 import io.swagger.annotations.ApiOperation;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
@@ -51,7 +51,7 @@ public class UserController {
         user.setLastName(request.getLastName());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setDateJoined(new Timestamp(System.currentTimeMillis()));
-        user.setRole(RoleEnum.FREE_USER.toString());
+        user.setRole(Role.FREE_USER.toString());
 
         User savedUser = userRepository.save(user);
 
@@ -70,12 +70,12 @@ public class UserController {
         User user = userRepository.findById(new ObjectId(id)).orElseThrow(() -> new UserNotFoundException(id));
 
         user.setEmail(request.getEmail() != null ? request.getEmail() : user.getEmail());
-        user.setPassword(request.getPassword() != null ? request.getPassword() : user.getPassword());
+        user.setPassword(request.getPassword() != null ? passwordEncoder.encode(request.getPassword()) : user.getPassword());
         user.setFirstName(request.getFirstName() != null ? request.getFirstName() : user.getFirstName());
         user.setLastName(request.getLastName() != null ? request.getLastName() : user.getLastName());
         if (request.getRole() != null) {
             try {
-                user.setRole(RoleEnum.valueOf(request.getRole()).toString());
+                user.setRole(Role.valueOf(request.getRole()).toString());
             } catch (IllegalArgumentException e) {
                 return new ResponseEntity<>("Invalid role type.", HttpStatus.BAD_REQUEST);
             }
