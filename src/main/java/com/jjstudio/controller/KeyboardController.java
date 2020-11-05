@@ -85,7 +85,7 @@ public class KeyboardController {
     private boolean isValidCreateKeyboardMapping(Map<String, String> mapping) {
         Map<String, Boolean> visited = new HashMap<>();
         for (String keyCode : mapping.keySet()) {
-            if (visited.get(keyCode)) {
+            if (visited.containsKey(keyCode)) {
                 return false;
             }
             if (!Keys.exists(Integer.parseInt(keyCode))) {
