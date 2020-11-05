@@ -4,8 +4,6 @@ import com.jjstudio.config.auth.UserPrincipal;
 import com.jjstudio.model.User;
 import com.jjstudio.util.Role;
 import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.MockBeans;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
