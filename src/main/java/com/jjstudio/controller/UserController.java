@@ -61,10 +61,6 @@ public class UserController {
         return new ResponseEntity<>(savedUser.getId().toHexString(), HttpStatus.CREATED);
     }
 
-    private boolean isValidPassword(String password) {
-        return password.length() > 5;
-    }
-
     @ApiOperation(value = "Get a user", notes = "${UserController.getUser.notes}")
     @GetMapping("/{id}")
     public ResponseEntity<User> getUser(@PathVariable String id) throws UserNotFoundException {
@@ -104,6 +100,10 @@ public class UserController {
     private boolean emailAlreadyExists(String email) {
         User existingUser = userRepository.findByEmail(email);
         return existingUser != null;
+    }
+
+    private boolean isValidPassword(String password) {
+        return password.length() > 5;
     }
 
 }
