@@ -2,7 +2,6 @@ package com.jjstudio.controller;
 
 import com.jjstudio.dto.user.CreateUserRequest;
 import com.jjstudio.dto.user.UpdateUserRequest;
-import com.jjstudio.dto.user.CreateUserErrorResponse;
 import com.jjstudio.exception.UserNotFoundException;
 import com.jjstudio.resource.UserRepository;
 import com.jjstudio.model.User;
@@ -40,9 +39,13 @@ public class UserController {
 
     @ApiOperation(value = "Create a new user", notes = "${UserController.createUser.notes}")
     @PostMapping
-    public ResponseEntity createUser(@RequestBody CreateUserRequest request) {
+    public ResponseEntity<String> createUser(@RequestBody CreateUserRequest request) {
         if (emailAlreadyExists(request.getEmail())) {
-            return new ResponseEntity<>(new CreateUserErrorResponse("A user with email " + request.getEmail() + " already exists."), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("A user with email " + request.getEmail() + " already exists.", HttpStatus.BAD_REQUEST);
+        }
+
+        if (!isValidPassword(request.getPassword())) {
+            return new ResponseEntity<>("Password is unsatisfactory. ", HttpStatus.BAD_REQUEST);
         }
 
         User user = new User();
@@ -56,6 +59,10 @@ public class UserController {
         User savedUser = userRepository.save(user);
 
         return new ResponseEntity<>(savedUser.getId().toHexString(), HttpStatus.CREATED);
+    }
+
+    private boolean isValidPassword(String password) {
+        return password.length() > 5;
     }
 
     @ApiOperation(value = "Get a user", notes = "${UserController.getUser.notes}")
