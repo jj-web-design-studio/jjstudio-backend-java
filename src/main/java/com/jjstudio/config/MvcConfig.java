@@ -13,7 +13,7 @@ public class MvcConfig implements WebMvcConfigurer {
         registry.addViewController("/hello").setViewName("hello");
         registry.addViewController("/login").setViewName("login");
 
-        registry.addViewController("/swagger-docs")
+        registry.addViewController("/swagger")
                 .setViewName("forward:" + "/swagger-ui/index.html");
     }
 
