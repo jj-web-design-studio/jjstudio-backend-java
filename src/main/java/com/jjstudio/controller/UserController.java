@@ -118,7 +118,7 @@ public class UserController {
     @ApiOperation(value = "Update current user", notes = "${UserController.updateCurrentUser.notes}")
     @PostMapping("/me")
     public ResponseEntity<String> updateCurrentUser(@RequestBody UpdateUserRequest request,
-                                                    Authentication authentication) throws UserNotFoundException {
+                                                    Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         User user = userRepository.findByEmail(userDetails.getUsername());

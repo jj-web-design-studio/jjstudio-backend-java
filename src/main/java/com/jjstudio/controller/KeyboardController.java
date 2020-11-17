@@ -3,6 +3,7 @@ package com.jjstudio.controller;
 import com.jjstudio.dto.keyboard.CreateKeyboardRequest;
 import com.jjstudio.model.Keyboard;
 import com.jjstudio.resource.KeyboardRepository;
+import com.jjstudio.util.AuthUtil;
 import com.jjstudio.util.Keys;
 import io.swagger.annotations.ApiOperation;
 import org.bson.types.ObjectId;
@@ -38,11 +39,15 @@ public class KeyboardController {
     @PostMapping
     public ResponseEntity<String> createKeyboard(@RequestBody CreateKeyboardRequest request,
                                                  Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        if (!AuthUtil.isPaidUser(userDetails.getAuthorities())) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
         if (!isValidCreateKeyboardMapping(request.getMapping())) {
             return new ResponseEntity<>("Invalid keyboard mapping configuration", HttpStatus.BAD_REQUEST);
         }
-
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         Keyboard keyboard = new Keyboard();
         keyboard.setName(request.getName());
