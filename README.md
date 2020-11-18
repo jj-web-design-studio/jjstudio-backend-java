@@ -1,6 +1,10 @@
 # jjstudio
 
 ## Set Up
+0. Clone this repository
+```bash
+git clone https://github.com/justinchung/jjstudio-java.git
+```
 1. Create a local MongoDB instance
 ```bash
 brew install mongodb-community@4.2.8
