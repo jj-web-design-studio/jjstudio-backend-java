@@ -1,5 +1,6 @@
-package com.jjstudio.config.auth;
+package com.jjstudio.service;
 
+import com.jjstudio.config.auth.UserPrincipal;
 import com.jjstudio.model.User;
 import com.jjstudio.resource.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @Service
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class MyUserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
