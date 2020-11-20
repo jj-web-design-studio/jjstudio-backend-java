@@ -27,7 +27,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/v1/me/keyboards")
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin("http://localhost:3000")
 public class KeyboardController {
 
     private final Logger logger = LoggerFactory.getLogger(KeyboardController.class);

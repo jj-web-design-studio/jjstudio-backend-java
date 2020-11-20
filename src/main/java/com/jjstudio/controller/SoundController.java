@@ -28,7 +28,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/v1/me/sounds")
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin("http://localhost:3000")
 public class SoundController {
 
     private final Logger logger = LoggerFactory.getLogger(SoundController.class);

@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/v1/me/tracks")
+@CrossOrigin("http://localhost:3000")
 public class TrackController {
 
     private final Logger logger = LoggerFactory.getLogger(TrackController.class);
