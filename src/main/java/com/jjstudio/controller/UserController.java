@@ -12,7 +12,6 @@ import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -30,7 +29,7 @@ import java.sql.Timestamp;
  */
 @RestController
 @RequestMapping("/v1/users")
-@CrossOrigin
+@CrossOrigin("http://localhost:3000")
 public class UserController {
 
     private final Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -44,15 +43,12 @@ public class UserController {
     @ApiOperation(value = "Create a new user", notes = "${UserController.createUser.notes}")
     @PostMapping
     public ResponseEntity<String> createUser(@RequestBody CreateUserRequest request) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_TYPE, "application/json");
-        headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*");
         if (emailAlreadyExists(request.getEmail())) {
-            return new ResponseEntity<>("A user with email " + request.getEmail() + " already exists.", headers, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("A user with email " + request.getEmail() + " already exists.", HttpStatus.BAD_REQUEST);
         }
 
         if (!isValidPassword(request.getPassword())) {
-            return new ResponseEntity<>("Password is unsatisfactory. ", headers, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Password is unsatisfactory. ", HttpStatus.BAD_REQUEST);
         }
 
         User user = new User();
@@ -65,7 +61,7 @@ public class UserController {
 
         User savedUser = userRepository.save(user);
 
-        return new ResponseEntity<>(savedUser.getId().toHexString(), headers, HttpStatus.CREATED);
+        return new ResponseEntity<>(savedUser.getId().toHexString(), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Get a user", notes = "${UserController.getUser.notes}")
