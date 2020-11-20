@@ -1,8 +1,5 @@
 package com.jjstudio.controller;
 
-import com.jjstudio.config.auth.UserDetailsServiceImpl;
-import com.jjstudio.dto.AuthenticationRequest;
-import com.jjstudio.dto.AuthenticationResponse;
 import com.jjstudio.dto.GenericResponse;
 import com.jjstudio.dto.user.CreateUserRequest;
 import com.jjstudio.dto.user.UpdateUserRequest;
@@ -10,7 +7,6 @@ import com.jjstudio.exception.UserNotFoundException;
 import com.jjstudio.resource.UserRepository;
 import com.jjstudio.model.User;
 import com.jjstudio.util.AuthUtil;
-import com.jjstudio.util.JwtUtil;
 import com.jjstudio.util.Role;
 import io.swagger.annotations.ApiOperation;
 import org.bson.types.ObjectId;
@@ -19,9 +15,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -48,14 +41,6 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private UserDetailsServiceImpl userDetailsService;
-
-    @Autowired
-    private JwtUtil jwtUtil;
 
     @ApiOperation(value = "Create a new user", notes = "${UserController.createUser.notes}")
     @PostMapping
@@ -175,23 +160,6 @@ public class UserController {
 
         User deletedUser = userRepository.deleteByEmail(userDetails.getUsername());
         return new ResponseEntity<>(deletedUser.getId().toHexString(), HttpStatus.NO_CONTENT);
-    }
-
-    @PostMapping("/auth")
-    public ResponseEntity<AuthenticationResponse> authenticateUser(@RequestBody AuthenticationRequest request) throws Exception {
-        try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
-            );
-        } catch (BadCredentialsException e) {
-            throw new Exception("Incorrect username or password", e);
-        }
-
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
-
-        final String jwt = jwtUtil.generateToken(userDetails);
-
-        return new ResponseEntity<>(new AuthenticationResponse(jwt), HttpStatus.OK);
     }
 
     private boolean emailAlreadyExists(String email) {
