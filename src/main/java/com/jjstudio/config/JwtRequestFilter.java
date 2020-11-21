@@ -1,7 +1,7 @@
 package com.jjstudio.config;
 
 import com.jjstudio.service.MyUserDetailsServiceImpl;
-import com.jjstudio.util.JwtUtil;
+import com.jjstudio.service.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

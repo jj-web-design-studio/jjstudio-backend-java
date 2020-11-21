@@ -3,7 +3,7 @@ package com.jjstudio.controller;
 import com.jjstudio.dto.AuthenticationRequest;
 import com.jjstudio.dto.AuthenticationResponse;
 import com.jjstudio.service.MyUserDetailsServiceImpl;
-import com.jjstudio.util.JwtUtil;
+import com.jjstudio.service.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

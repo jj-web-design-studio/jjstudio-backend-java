@@ -1,4 +1,4 @@
-package com.jjstudio.util;
+package com.jjstudio.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

@@ -6,7 +6,7 @@ import com.jjstudio.dto.user.UpdateUserRequest;
 import com.jjstudio.exception.UserNotFoundException;
 import com.jjstudio.resource.UserRepository;
 import com.jjstudio.model.User;
-import com.jjstudio.util.AuthUtil;
+import com.jjstudio.service.AuthUtil;
 import com.jjstudio.util.Role;
 import io.swagger.annotations.ApiOperation;
 import org.bson.types.ObjectId;
@@ -41,6 +41,8 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private AuthUtil authUtil;
 
     @ApiOperation(value = "Create a new user", notes = "${UserController.createUser.notes}")
     @PostMapping
@@ -81,7 +83,7 @@ public class UserController {
     public ResponseEntity<User> getUser(@PathVariable String id,
                                         Authentication authentication) throws UserNotFoundException {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        if (!AuthUtil.isAdminUser(userDetails.getAuthorities())) {
+        if (!authUtil.isAdminUser(userDetails.getAuthorities())) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         return new ResponseEntity<>(userRepository.findById(new ObjectId(id)).orElseThrow(() -> new UserNotFoundException(id)), HttpStatus.OK);

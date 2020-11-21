@@ -3,7 +3,7 @@ package com.jjstudio.controller;
 import com.jjstudio.dto.keyboard.CreateKeyboardRequest;
 import com.jjstudio.model.Keyboard;
 import com.jjstudio.resource.KeyboardRepository;
-import com.jjstudio.util.AuthUtil;
+import com.jjstudio.service.AuthUtil;
 import com.jjstudio.util.Keys;
 import io.swagger.annotations.ApiOperation;
 import org.bson.types.ObjectId;
@@ -35,13 +35,16 @@ public class KeyboardController {
     @Autowired
     private KeyboardRepository keyboardRepository;
 
+    @Autowired
+    private AuthUtil authUtil;
+
     @ApiOperation(value = "Create a keyboard", notes = "${KeyboardController.createKeyboard.notes}")
     @PostMapping
     public ResponseEntity<String> createKeyboard(@RequestBody CreateKeyboardRequest request,
                                                  Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        if (!AuthUtil.isPaidUser(userDetails.getAuthorities())) {
+        if (authUtil.isPaidUser(userDetails.getAuthorities())) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
