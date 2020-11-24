@@ -4,6 +4,7 @@ import com.jjstudio.dto.AuthenticationRequest;
 import com.jjstudio.dto.AuthenticationResponse;
 import com.jjstudio.service.MyUserDetailsServiceImpl;
 import com.jjstudio.service.JwtUtil;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,7 @@ public class AuthController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @ApiOperation(value = "Get JWT", notes = "${AuthController.authenticatUser.notes}")
     @PostMapping
     public ResponseEntity<AuthenticationResponse> authenticateUser(@RequestBody AuthenticationRequest request) throws Exception {
         try {
