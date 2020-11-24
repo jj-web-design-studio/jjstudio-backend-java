@@ -2,10 +2,12 @@ package com.jjstudio.controller;
 
 import com.jjstudio.config.SpringSecurityWebAuxTestConfig;
 import com.jjstudio.dto.keyboard.CreateKeyboardRequest;
+import com.jjstudio.resource.KeyboardRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
@@ -27,6 +29,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 )
 @AutoConfigureMockMvc
 public class KeyboardControllerTest extends BaseControllerTest {
+
+    @MockBean
+    KeyboardRepository keyboardRepository;
 
     @Test
     @WithUserDetails("freeuser@gmail.com")
