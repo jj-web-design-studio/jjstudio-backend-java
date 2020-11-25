@@ -12,15 +12,15 @@ import static com.jjstudio.util.Role.FREE_USER;
 @Service
 public class AuthUtil {
 
-    public static boolean isAdminUser(Collection<? extends GrantedAuthority> authorities) {
+    public boolean isAdminUser(Collection<? extends GrantedAuthority> authorities) {
         return authorities.stream().anyMatch(r -> r.getAuthority().equals(ADMIN.toString()));
     }
 
-    public static boolean isPaidUser(Collection<? extends GrantedAuthority> authorities) {
+    public boolean isPaidUser(Collection<? extends GrantedAuthority> authorities) {
         return authorities.stream().anyMatch(r -> r.getAuthority().equals(PAID_USER.toString()));
     }
 
-    public static boolean isFreeUser(Collection<? extends GrantedAuthority> authorities) {
+    public boolean isFreeUser(Collection<? extends GrantedAuthority> authorities) {
         return authorities.stream().anyMatch(r -> r.getAuthority().equals(FREE_USER.toString()));
     }
 
