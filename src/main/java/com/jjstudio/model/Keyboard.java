@@ -14,6 +14,8 @@ public class Keyboard {
 
     private Map<String, String> mapping;
 
+    private boolean isDefault;
+
     public ObjectId getId() {
         return id;
     }
@@ -46,4 +48,11 @@ public class Keyboard {
         this.mapping = mapping;
     }
 
+    public boolean isDefault() {
+        return isDefault;
+    }
+
+    public void setDefault(boolean aDefault) {
+        isDefault = aDefault;
+    }
 }

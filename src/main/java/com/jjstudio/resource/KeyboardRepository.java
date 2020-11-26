@@ -13,6 +13,8 @@ public interface KeyboardRepository extends MongoRepository<Keyboard, ObjectId> 
 
     Iterable<Keyboard> findAllByIdAndUsername(ObjectId id, String username);
 
+    Keyboard findByIsDefault(boolean isDefault);
+
     @Query(delete = true)
     Keyboard deleteByIdAndUsername(ObjectId id, String username);
 

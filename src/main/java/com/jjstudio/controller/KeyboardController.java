@@ -42,10 +42,16 @@ public class KeyboardController {
     @PostMapping
     public ResponseEntity<String> createKeyboard(@RequestBody CreateKeyboardRequest request,
                                                  Authentication authentication) {
+        logger.debug("Received request at POST /v1/me/keyboards");
+
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         if (authUtil.isPaidUser(userDetails.getAuthorities())) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        if (request.getName().toUpperCase().equals("DEFAULT")) {
+            return new ResponseEntity<>("This keyboard name already exists!", HttpStatus.BAD_REQUEST);
         }
 
         if (!isValidCreateKeyboardMapping(request.getMapping())) {
@@ -56,6 +62,7 @@ public class KeyboardController {
         keyboard.setName(request.getName());
         keyboard.setMapping(request.getMapping());
         keyboard.setUsername(userDetails.getUsername());
+        keyboard.setDefault(false);
 
         Keyboard savedKeyboard = keyboardRepository.save(keyboard);
 
@@ -66,6 +73,8 @@ public class KeyboardController {
     @GetMapping("/{id}")
     public ResponseEntity<Keyboard> getKeyboardById(@PathVariable String id,
                                                     Authentication authentication) {
+        logger.debug("Received request at GET /v1/me/keyboards/{id}");
+
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         return new ResponseEntity<>(keyboardRepository.findByIdAndUsername(new ObjectId(id), userDetails.getUsername()), HttpStatus.OK);
@@ -74,15 +83,31 @@ public class KeyboardController {
     @ApiOperation(value = "Get all keyboards", notes = "${KeyboardController.getAllKeyboards.notes}")
     @GetMapping
     public ResponseEntity<Iterable<Keyboard>> getAllKeyboards(Authentication authentication) {
+        logger.debug("Received request at GET /v1/me/keyboards");
+
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         return new ResponseEntity<>(keyboardRepository.findByUsername(userDetails.getUsername()), HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Get default keyboard", notes = "${KeyboardController.getDefaultKeyboard.notes}")
+    @GetMapping("/default")
+    public ResponseEntity<Keyboard> getDefaultKeyboard() {
+        logger.debug("Received request at GET /v1/me/keyboards/default");
+
+        Keyboard keyboard = keyboardRepository.findByIsDefault(true);
+        if (keyboard == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(keyboard, HttpStatus.OK);
     }
 
     @ApiOperation(value = "Delete a keyboard", notes = "${KeyboardController.deleteKeyboardById.notes}")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteKeyboardById(@PathVariable String id,
                                                      Authentication authentication) {
+        logger.debug("Received request at DELETE /v1/me/keyboards/{id}");
+
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         Keyboard deletedKeyboard = keyboardRepository.deleteByIdAndUsername(new ObjectId(id), userDetails.getUsername());

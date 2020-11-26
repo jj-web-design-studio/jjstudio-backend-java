@@ -43,6 +43,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .antMatchers("/", "/home").permitAll()
                 .antMatchers(HttpMethod.POST, "/v1/users", "/v1/auth").permitAll()
+                .antMatchers(HttpMethod.GET, "/v1/me/keyboards/default").permitAll()
                 .anyRequest().authenticated()
                 .and()
             .sessionManagement()
