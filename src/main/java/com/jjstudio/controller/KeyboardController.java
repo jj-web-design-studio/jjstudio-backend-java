@@ -54,15 +54,14 @@ public class KeyboardController {
             return new ResponseEntity<>("This keyboard name already exists!", HttpStatus.BAD_REQUEST);
         }
 
-        if (!isValidCreateKeyboardMapping(request.getMapping())) {
-            return new ResponseEntity<>("Invalid keyboard mapping configuration", HttpStatus.BAD_REQUEST);
-        }
-
         Keyboard keyboard = new Keyboard();
         keyboard.setName(request.getName());
-        keyboard.setMapping(request.getMapping());
+        keyboard.setNumRow(request.getNumRow());
+        keyboard.setQweRow(request.getQweRow());
+        keyboard.setAsdRow(request.getAsdRow());
+        keyboard.setZxcRow(request.getZxcRow());
         keyboard.setUsername(userDetails.getUsername());
-        keyboard.setDefault(false);
+        keyboard.setDefault(request.isDefault());
 
         Keyboard savedKeyboard = keyboardRepository.save(keyboard);
 
