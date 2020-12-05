@@ -74,6 +74,14 @@ public class KeyboardController {
                                                     Authentication authentication) {
         logger.debug("Received request at GET /v1/me/keyboards/{id}");
 
+        if ("default".equals(id)) {
+            Keyboard keyboard = keyboardRepository.findByIsDefault(true);
+            if (keyboard == null) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(keyboard, HttpStatus.OK);
+        }
+
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         return new ResponseEntity<>(keyboardRepository.findByIdAndUsername(new ObjectId(id), userDetails.getUsername()), HttpStatus.OK);
@@ -87,18 +95,6 @@ public class KeyboardController {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         return new ResponseEntity<>(keyboardRepository.findByUsername(userDetails.getUsername()), HttpStatus.OK);
-    }
-
-    @ApiOperation(value = "Get default keyboard", notes = "${KeyboardController.getDefaultKeyboard.notes}")
-    @GetMapping("/default")
-    public ResponseEntity<Keyboard> getDefaultKeyboard() {
-        logger.debug("Received request at GET /v1/me/keyboards/default");
-
-        Keyboard keyboard = keyboardRepository.findByIsDefault(true);
-        if (keyboard == null) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(keyboard, HttpStatus.OK);
     }
 
     @ApiOperation(value = "Delete a keyboard", notes = "${KeyboardController.deleteKeyboardById.notes}")
