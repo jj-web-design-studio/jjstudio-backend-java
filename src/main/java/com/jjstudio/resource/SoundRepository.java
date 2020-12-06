@@ -11,7 +11,6 @@ public interface SoundRepository extends CrudRepository<Sound, ObjectId> {
 
     Iterable<Sound> findByUsername(String username);
 
-    @Query(fields = "{ '_id' : 1, 'file' : 1 }")
     Iterable<Sound> findAllById(Iterable<ObjectId> id);
 
     @Query(delete = true)

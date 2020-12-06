@@ -49,7 +49,6 @@ public class KeyboardControllerTest extends BaseControllerTest {
 
         CreateKeyboardRequest request = new CreateKeyboardRequest();
         request.setName("Invalid Key");
-        request.setMapping(mapping);
 
         return request;
     }
