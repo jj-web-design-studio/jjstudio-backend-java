@@ -44,11 +44,13 @@ public class KeyboardControllerTest extends BaseControllerTest {
     }
 
     private CreateKeyboardRequest getInvalidNonExistentKeyMapping() {
-        Map<String, String> mapping = new HashMap<>();
-        mapping.put("-1", "12asdzx12");
+        Map<String, String> zxcRow = new HashMap<>();
+        zxcRow.put("-1", "12asdzx12");
 
         CreateKeyboardRequest request = new CreateKeyboardRequest();
         request.setName("Invalid Key");
+
+        request.setZxcRow(zxcRow);
 
         return request;
     }
