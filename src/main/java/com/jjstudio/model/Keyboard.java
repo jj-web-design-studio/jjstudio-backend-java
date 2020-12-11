@@ -1,11 +1,14 @@
 package com.jjstudio.model;
 
 import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.mapping.FieldType;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import java.util.Map;
 
 public class Keyboard {
 
+    @MongoId(value = FieldType.OBJECT_ID)
     private ObjectId id;
 
     private String name;

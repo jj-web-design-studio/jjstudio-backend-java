@@ -2,9 +2,11 @@ package com.jjstudio.model;
 
 import com.jjstudio.util.TimeSignature;
 import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.FieldType;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
+@Document(collection="tracks")
 public class Track {
 
     @MongoId(value = FieldType.OBJECT_ID)
