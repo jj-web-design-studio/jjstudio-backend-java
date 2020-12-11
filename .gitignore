@@ -28,5 +28,8 @@ hs_err_pid*
 # Exclude gradle cache settings
 .gradle/
 
+# Include gradle-wrapper.jar
+!gradle-wrapper.jar
+
 # Exclude /build directory which contains files generated after compilation
 /build
