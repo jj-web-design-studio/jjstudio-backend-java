@@ -21,6 +21,7 @@ import java.util.Map;
 
 /**
  * Rest controller for Keyboard entity
+ *
  * @author justinchung
  * @version 1.0
  * @since 1.0
@@ -45,6 +46,10 @@ public class KeyboardController {
         logger.debug("Received request at POST /v1/me/keyboards");
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        if (!isValidCreateKeyboardMapping(request.getNumRow(), request.getQweRow(), request.getAsdRow(), request.getZxcRow())) {
+            return new ResponseEntity<>("Invalid keyboard mapping configuration", HttpStatus.BAD_REQUEST);
+        }
 
         if (authUtil.isPaidUser(userDetails.getAuthorities())) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -110,16 +115,31 @@ public class KeyboardController {
         return new ResponseEntity<>(deletedKeyboard.getId().toHexString(), HttpStatus.OK);
     }
 
-    private boolean isValidCreateKeyboardMapping(Map<String, String> mapping) {
-        Map<String, Boolean> visited = new HashMap<>();
-        for (String keyCode : mapping.keySet()) {
-            if (visited.containsKey(keyCode)) {
-                return false;
+    private boolean isValidCreateKeyboardMapping(Map<String, String> numRow,
+                                                 Map<String, String> qweRow,
+                                                 Map<String, String> asdRow,
+                                                 Map<String, String> zxcRow) {
+        return isValidKeyRowMapping(numRow, Keys.Rows.NUM)
+                && isValidKeyRowMapping(qweRow, Keys.Rows.QWE)
+                && isValidKeyRowMapping(asdRow, Keys.Rows.ASD)
+                && isValidKeyRowMapping(zxcRow, Keys.Rows.ZXC);
+    }
+
+    private boolean isValidKeyRowMapping(Map<String, String> row, int expectedRow) {
+        if (row != null) {
+            Map<String, Boolean> visited = new HashMap<>();
+            for (String keyCode : row.keySet()) {
+                if (visited.containsKey(keyCode)) {
+                    return false;
+                }
+                if (!Keys.keyCodeExists(Integer.parseInt(keyCode))) {
+                    return false;
+                }
+                if (!Keys.keyCodeIsOfRow(Integer.parseInt(keyCode), expectedRow)) {
+                    return false;
+                }
+                visited.put(keyCode, true);
             }
-            if (!Keys.exists(Integer.parseInt(keyCode))) {
-                return false;
-            }
-            visited.put(keyCode, true);
         }
         return true;
     }
