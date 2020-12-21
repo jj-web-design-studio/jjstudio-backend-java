@@ -6,6 +6,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.FieldType;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Document(collection="tracks")
 public class Track {
 
@@ -16,7 +19,7 @@ public class Track {
 
     private TimeSignature timeSignature;
 
-    private Integer[][] contents;
+    private List<List<Note>> contents;
 
     private String username;
 
@@ -44,11 +47,11 @@ public class Track {
         this.timeSignature = timeSignature;
     }
 
-    public Integer[][] getContents() {
+    public List<List<Note>> getContents() {
         return contents;
     }
 
-    public void setContents(Integer[][] contents) {
+    public void setContents(List<List<Note>> contents) {
         this.contents = contents;
     }
 

@@ -1,6 +1,9 @@
 package com.jjstudio.dto.track;
 
+import com.jjstudio.model.Note;
 import com.jjstudio.util.TimeSignature;
+
+import java.util.List;
 
 public class SaveTrackRequest {
 
@@ -8,7 +11,7 @@ public class SaveTrackRequest {
 
     private TimeSignature timeSignature;
 
-    private Integer[][] contents;
+    private List<List<Note>> contents;
 
     public String getName() {
         return name;
@@ -26,11 +29,11 @@ public class SaveTrackRequest {
         this.timeSignature = timeSignature;
     }
 
-    public Integer[][] getContents() {
+    public List<List<Note>> getContents() {
         return contents;
     }
 
-    public void setContents(Integer[][] contents) {
+    public void setContents(List<List<Note>> contents) {
         this.contents = contents;
     }
 
