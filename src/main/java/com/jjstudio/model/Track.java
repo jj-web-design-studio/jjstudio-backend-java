@@ -19,6 +19,8 @@ public class Track {
 
     private TimeSignature timeSignature;
 
+    private Integer bpm;
+
     private List<List<Note>> contents;
 
     private String username;
@@ -45,6 +47,14 @@ public class Track {
 
     public void setTimeSignature(TimeSignature timeSignature) {
         this.timeSignature = timeSignature;
+    }
+
+    public Integer getBpm() {
+        return bpm;
+    }
+
+    public void setBpm(Integer bpm) {
+        this.bpm = bpm;
     }
 
     public List<List<Note>> getContents() {

@@ -11,6 +11,8 @@ public class SaveTrackRequest {
 
     private TimeSignature timeSignature;
 
+    private Integer bpm;
+
     private List<List<Note>> contents;
 
     public String getName() {
@@ -27,6 +29,14 @@ public class SaveTrackRequest {
 
     public void setTimeSignature(TimeSignature timeSignature) {
         this.timeSignature = timeSignature;
+    }
+
+    public Integer getBpm() {
+        return bpm;
+    }
+
+    public void setBpm(Integer bpm) {
+        this.bpm = bpm;
     }
 
     public List<List<Note>> getContents() {
