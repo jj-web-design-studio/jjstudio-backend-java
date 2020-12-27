@@ -33,7 +33,10 @@ public class TrackController {
     @ApiOperation(value = "Save a track", notes = "${TrackController.createTrack.notes}")
     @PostMapping
     public ResponseEntity<String> createTrack(@RequestBody SaveTrackRequest request,
-                                    Authentication authentication) {
+                                              Authentication authentication) {
+        if (!isValidSaveRequest(request)) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         Track track = new Track();
@@ -67,11 +70,15 @@ public class TrackController {
     @ApiOperation(value = "Delete a track", notes = "${TrackController.deleteTrackById.notes}")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteTrackById(@PathVariable String id,
-                                          Authentication authentication) {
+                                                  Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         Track deletedTrack = trackRepository.deleteByIdAndUsername(new ObjectId(id), userDetails.getUsername());
         return new ResponseEntity<>(deletedTrack.getId().toHexString(), HttpStatus.OK);
+    }
+
+    private boolean isValidSaveRequest(SaveTrackRequest request) {
+        return request.getName() != null && request.getContents() != null && request.getContents().size() > 0 && request.getContents().get(0).size() > 0 && request.getTimeSignature() != null;
     }
 
 }
