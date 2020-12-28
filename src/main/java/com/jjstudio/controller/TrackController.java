@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * Rest controller for Track entity
+ *
  * @author justinchung
  * @version 1.0
  * @since 1.0
@@ -78,7 +79,11 @@ public class TrackController {
     }
 
     private boolean isValidSaveRequest(SaveTrackRequest request) {
-        return request.getName() != null && request.getContents() != null && request.getContents().size() > 0 && request.getContents().get(0).size() > 0 && request.getTimeSignature() != null;
+        return request.getName() != null &&
+                request.getContents() != null &&
+                request.getContents().size() > 0 &&
+                request.getContents().get(0).size() > 0 &&
+                request.getTimeSignature() != null;
     }
 
 }
