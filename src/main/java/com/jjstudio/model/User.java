@@ -9,11 +9,11 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import java.util.Date;
 
-@Document(collection="users")
+@Document(collection = "users")
 public class User {
 
     @MongoId(value = FieldType.OBJECT_ID)
-    @JsonSerialize(using= ObjectIdSerializer.class)
+    @JsonSerialize(using = ObjectIdSerializer.class)
     private ObjectId id;
 
     private String email;

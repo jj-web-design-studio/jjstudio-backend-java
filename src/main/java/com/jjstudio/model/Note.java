@@ -7,11 +7,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.FieldType;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
-@Document(collection="notes")
+@Document(collection = "notes")
 public class Note {
 
     @MongoId(value = FieldType.OBJECT_ID)
-    @JsonSerialize(using= ObjectIdSerializer.class)
+    @JsonSerialize(using = ObjectIdSerializer.class)
     private ObjectId soundId;
 
     private Float left;

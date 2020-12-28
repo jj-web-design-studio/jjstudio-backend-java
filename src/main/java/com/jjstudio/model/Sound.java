@@ -8,11 +8,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.FieldType;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
-@Document(collection="sounds")
+@Document(collection = "sounds")
 public class Sound {
 
     @MongoId(value = FieldType.OBJECT_ID)
-    @JsonSerialize(using= ObjectIdSerializer.class)
+    @JsonSerialize(using = ObjectIdSerializer.class)
     private ObjectId id;
 
     private boolean isDefault;

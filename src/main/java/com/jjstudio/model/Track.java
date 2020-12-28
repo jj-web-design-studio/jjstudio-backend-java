@@ -11,11 +11,11 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 import java.util.ArrayList;
 import java.util.List;
 
-@Document(collection="tracks")
+@Document(collection = "tracks")
 public class Track {
 
     @MongoId(value = FieldType.OBJECT_ID)
-    @JsonSerialize(using= ObjectIdSerializer.class)
+    @JsonSerialize(using = ObjectIdSerializer.class)
     private ObjectId id;
 
     private String name;
