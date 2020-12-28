@@ -1,5 +1,7 @@
 package com.jjstudio.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.jjstudio.util.ObjectIdSerializer;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.FieldType;
@@ -11,6 +13,7 @@ import java.util.Date;
 public class User {
 
     @MongoId(value = FieldType.OBJECT_ID)
+    @JsonSerialize(using= ObjectIdSerializer.class)
     private ObjectId id;
 
     private String email;
