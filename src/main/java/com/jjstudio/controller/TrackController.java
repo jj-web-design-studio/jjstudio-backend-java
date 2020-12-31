@@ -43,6 +43,8 @@ public class TrackController {
         Track track = new Track();
         track.setName(request.getName());
         track.setTimeSignature(request.getTimeSignature());
+        track.setBpm(request.getBpm());
+        track.setNumRows(request.getNumRows());
         track.setContents(request.getContents());
         track.setUsername(userDetails.getUsername());
 

@@ -24,6 +24,8 @@ public class Track {
 
     private Integer bpm;
 
+    private Integer numRows;
+
     private List<List<Note>> contents;
 
     private String username;
@@ -58,6 +60,14 @@ public class Track {
 
     public void setBpm(Integer bpm) {
         this.bpm = bpm;
+    }
+
+    public Integer getNumRows() {
+        return numRows;
+    }
+
+    public void setNumRows(Integer numRows) {
+        this.numRows = numRows;
     }
 
     public List<List<Note>> getContents() {
