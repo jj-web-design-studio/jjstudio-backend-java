@@ -8,7 +8,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.FieldType;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection = "tracks")
@@ -24,7 +23,7 @@ public class Track {
 
     private Integer bpm;
 
-    private Integer numRows;
+    private Integer rowCount;
 
     private List<List<Note>> contents;
 
@@ -62,12 +61,12 @@ public class Track {
         this.bpm = bpm;
     }
 
-    public Integer getNumRows() {
-        return numRows;
+    public Integer getRowCount() {
+        return rowCount;
     }
 
-    public void setNumRows(Integer numRows) {
-        this.numRows = numRows;
+    public void setRowCount(Integer rowCount) {
+        this.rowCount = rowCount;
     }
 
     public List<List<Note>> getContents() {

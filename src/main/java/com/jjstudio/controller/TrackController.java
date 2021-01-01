@@ -44,7 +44,7 @@ public class TrackController {
         track.setName(request.getName());
         track.setTimeSignature(request.getTimeSignature());
         track.setBpm(request.getBpm());
-        track.setNumRows(request.getNumRows());
+        track.setRowCount(request.getRowCount());
         track.setContents(request.getContents());
         track.setUsername(userDetails.getUsername());
 
