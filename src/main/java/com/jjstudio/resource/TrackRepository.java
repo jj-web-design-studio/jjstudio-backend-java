@@ -2,10 +2,10 @@ package com.jjstudio.resource;
 
 import com.jjstudio.model.Track;
 import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 
-public interface TrackRepository extends CrudRepository<Track, ObjectId> {
+public interface TrackRepository extends MongoRepository<Track, ObjectId> {
 
     Track findByIdAndUsername(ObjectId id, String username);
 
