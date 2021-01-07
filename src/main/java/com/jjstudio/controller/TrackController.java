@@ -33,22 +33,14 @@ public class TrackController {
 
     @ApiOperation(value = "Save a track", notes = "${TrackController.createTrack.notes}")
     @PostMapping
-    public ResponseEntity<String> createTrack(@RequestBody SaveTrackRequest request,
+    public ResponseEntity<String> createTrack(@RequestBody Track request,
                                               Authentication authentication) {
         if (!isValidSaveRequest(request)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
-        Track track = new Track();
-        track.setName(request.getName());
-        track.setTimeSignature(request.getTimeSignature());
-        track.setBpm(request.getBpm());
-        track.setRowCount(request.getRowCount());
-        track.setContents(request.getContents());
-        track.setUsername(userDetails.getUsername());
-
-        Track savedTracked = trackRepository.save(track);
+        request.setUsername(userDetails.getUsername());
+        Track savedTracked = trackRepository.save(request);
 
         return new ResponseEntity<>(savedTracked.getId().toHexString(), HttpStatus.CREATED);
     }
@@ -80,12 +72,11 @@ public class TrackController {
         return new ResponseEntity<>(deletedTrack.getId().toHexString(), HttpStatus.OK);
     }
 
-    private boolean isValidSaveRequest(SaveTrackRequest request) {
+    private boolean isValidSaveRequest(Track request) {
         return request.getName() != null &&
                 request.getContents() != null &&
                 request.getContents().size() > 0 &&
                 request.getContents().get(0).size() > 0 &&
                 request.getTimeSignature() != null;
     }
-
 }
