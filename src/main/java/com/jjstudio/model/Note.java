@@ -18,6 +18,10 @@ public class Note {
 
     private Integer row;
 
+    private String color;
+
+    private String label;
+
     public ObjectId getSoundId() {
         return soundId;
     }
@@ -40,5 +44,21 @@ public class Note {
 
     public void setRow(Integer row) {
         this.row = row;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
     }
 }
