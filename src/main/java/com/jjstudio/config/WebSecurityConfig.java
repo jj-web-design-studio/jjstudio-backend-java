@@ -1,6 +1,7 @@
 package com.jjstudio.config;
 
 import com.jjstudio.config.auth.CustomBasicAuthenticationEntryPoint;
+import com.jjstudio.filter.JwtRequestFilter;
 import com.jjstudio.service.MyUserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
