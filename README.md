@@ -39,6 +39,7 @@ mkdir -p build/dependency && (cd build/dependency; jar -xf ../libs/*.jar)
 docker build --build-arg DEPENDENCY=build/dependency -t springio/gs-spring-boot-docker .
 ```
 3. Create docker-compose.yml with the following contents:
+```
 version: '2'
 services:
   redis-server:
@@ -79,7 +80,7 @@ services:
 
 volumes:
   mongodbdata:
-
+```
 4. Run all containers to start full-stack web app
 ```bash
 cd ../path/to/docker-compose.yml
