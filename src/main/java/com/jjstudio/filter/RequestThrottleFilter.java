@@ -18,7 +18,7 @@ import java.io.IOException;
 @Component
 public class RequestThrottleFilter extends OncePerRequestFilter {
 
-    private Logger logger = LoggerFactory.getLogger(RequestThrottleFilter.class);
+    private final Logger logger = LoggerFactory.getLogger(RequestThrottleFilter.class);
 
     @Autowired
     private JwtUtil jwtUtil;
