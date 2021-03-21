@@ -2,6 +2,7 @@
 
 ## Set up
 1. Set up the project directory on your local machine, like:
+```
     .
     ├── ...
     ├── jjstudio                    # Top-level/root
@@ -10,6 +11,7 @@
     │   ├── docker-compose.yml      # docker-compose for local dev only
     │   └── ...                     # etc.
     └── ...
+```
 2. Compile Java code
 ```bash
 cd /jjstudio-java
