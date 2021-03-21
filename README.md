@@ -5,13 +5,16 @@
 ```
     .
     ├── ...
-    ├── jjstudio                    # Top-level/root
-    │   ├── jjstudio-java           # Spring Boot App --> https://github.com/jj-web-design-studio/jjstudio-backend-java.git
-    │   ├── jjstudio-frontend       # React App       --> https://github.com/jj-web-design-studio/jjstudio-frontend-react
+    ├── jjstudio                    # Top-level
+    │   ├── jjstudio-java           # Spring Boot App
+    │   ├── jjstudio-frontend       # React App
     │   ├── docker-compose.yml      # docker-compose for local dev only
     │   └── ...                     # etc.
     └── ...
 ```
+> Spring Boot App --> https://github.com/jj-web-design-studio/jjstudio-backend-java
+
+> React App --> https://github.com/jj-web-design-studio/jjstudio-frontend-react
 2. Compile Java code
 ```bash
 cd /jjstudio-java
