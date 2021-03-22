@@ -43,8 +43,6 @@ public class KeyboardController {
     @PostMapping
     public ResponseEntity<String> createKeyboard(@RequestBody CreateKeyboardRequest request,
                                                  Authentication authentication) {
-        logger.debug("Received request at POST /v1/me/keyboards");
-
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         if (!isValidCreateKeyboardMapping(request.getNumRow(), request.getQweRow(), request.getAsdRow(), request.getZxcRow())) {
@@ -77,8 +75,6 @@ public class KeyboardController {
     @GetMapping("/{id}")
     public ResponseEntity<Keyboard> getKeyboardById(@PathVariable String id,
                                                     Authentication authentication) {
-        logger.debug("Received request at GET /v1/me/keyboards/{id}");
-
         if ("default".equals(id)) {
             Keyboard keyboard = keyboardRepository.findByIsDefault(true);
             if (keyboard == null) {
@@ -95,8 +91,6 @@ public class KeyboardController {
     @ApiOperation(value = "Get all keyboards", notes = "${KeyboardController.getAllKeyboards.notes}")
     @GetMapping
     public ResponseEntity<Iterable<Keyboard>> getAllKeyboards(Authentication authentication) {
-        logger.debug("Received request at GET /v1/me/keyboards");
-
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         return new ResponseEntity<>(keyboardRepository.findByUsername(userDetails.getUsername()), HttpStatus.OK);
@@ -106,8 +100,6 @@ public class KeyboardController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteKeyboardById(@PathVariable String id,
                                                      Authentication authentication) {
-        logger.debug("Received request at DELETE /v1/me/keyboards/{id}");
-
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         Keyboard deletedKeyboard = keyboardRepository.deleteByIdAndUsername(new ObjectId(id), userDetails.getUsername());

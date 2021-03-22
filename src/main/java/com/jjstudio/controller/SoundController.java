@@ -79,7 +79,7 @@ public class SoundController {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         if (ids != null && ids.size() > 0) {
-            logger.info("id list is not null");
+            logger.debug("id list is not null");
             List<ObjectId> objectIds = new ArrayList<>();
             for (String id : ids) {
                 ObjectId objectId = new ObjectId(id);
