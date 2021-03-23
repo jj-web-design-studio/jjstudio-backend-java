@@ -33,6 +33,8 @@ public class RequestThrottleFilter extends OncePerRequestFilter {
 
     private final String REQUEST_COUNT = "request_count";
 
+    private final int MAX_ALLOWED_REQUESTS_PER_MIN = 10;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -52,7 +54,7 @@ public class RequestThrottleFilter extends OncePerRequestFilter {
             }
         } else {
             jedis.hset(username, LAST_REQUEST_TIMESTAMP, Long.toString(currentTime));
-            jedis.hset(username, REQUEST_COUNT, Integer.toString(5));
+            jedis.hset(username, REQUEST_COUNT, Integer.toString(MAX_ALLOWED_REQUESTS_PER_MIN));
         }
 
         filterChain.doFilter(request, response);
