@@ -23,7 +23,6 @@ cd /jjstudio-java
 3. Create docker-compose.yml with the following contents:
 ```
 version: '2'
-
 services:
   redis-server:
     image: 'redis'
@@ -39,9 +38,11 @@ services:
       context: ./jjstudio-java
     ports:
       - 8080:8080
+      - 5005:5005
     hostname: spring
     volumes:
-      - ./jjstudio-java/build/libs:/app/libs
+      - ./jjstudio-java/build/libs:/app
+    command: java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 -Djava.security.egd=file:/dev/./urandom -jar /app/jj-studio-0.1.0.jar
   react:
     container_name: jjstudio_react
     build:
