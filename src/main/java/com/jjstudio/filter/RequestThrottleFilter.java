@@ -33,7 +33,7 @@ public class RequestThrottleFilter extends OncePerRequestFilter {
 
     private final String REQUEST_COUNT = "request_count";
 
-    private final int MAX_ALLOWED_REQUESTS_PER_MIN = 10;
+    private final int MAX_ALLOWED_REQUESTS_PER_MIN = 100;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
