@@ -39,8 +39,8 @@ public class SoundController {
     @ApiOperation(value = "Create a sound", notes = "${SoundController.createSound.notes}")
     @PostMapping
     public ResponseEntity<String> createSound(@RequestParam("file") MultipartFile multipartFile,
-                                      @RequestParam("name") String name,
-                                      Authentication authentication) {
+                                              @RequestParam("name") String name,
+                                              Authentication authentication) {
         if (multipartFile.getSize() > 15000000) {   // 15MB
             return new ResponseEntity<>("The file is too large. The maximum file size allowed is 15MB.", HttpStatus.BAD_REQUEST);
         }
@@ -93,7 +93,7 @@ public class SoundController {
     @ApiOperation(value = "Delete a sound", notes = "${SoundController.deleteSoundById.notes}")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteSoundById(@PathVariable String id,
-                                          Authentication authentication) {
+                                                  Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         Sound sound = soundRepository.deleteByIdAndUsername(new ObjectId(id), userDetails.getUsername());
