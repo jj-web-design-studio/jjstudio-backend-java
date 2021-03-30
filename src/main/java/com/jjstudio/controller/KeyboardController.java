@@ -1,6 +1,6 @@
 package com.jjstudio.controller;
 
-import com.jjstudio.dto.keyboard.CreateKeyboardRequest;
+import com.jjstudio.dto.keyboard.Key;
 import com.jjstudio.model.Keyboard;
 import com.jjstudio.resource.KeyboardRepository;
 import com.jjstudio.service.AuthUtil;
@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -41,7 +42,7 @@ public class KeyboardController {
 
     @ApiOperation(value = "Create a keyboard", notes = "${KeyboardController.createKeyboard.notes}")
     @PostMapping
-    public ResponseEntity<String> createKeyboard(@RequestBody CreateKeyboardRequest request,
+    public ResponseEntity<String> createKeyboard(@RequestBody Keyboard request,
                                                  Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
@@ -57,16 +58,7 @@ public class KeyboardController {
             return new ResponseEntity<>("This keyboard name already exists!", HttpStatus.BAD_REQUEST);
         }
 
-        Keyboard keyboard = new Keyboard();
-        keyboard.setName(request.getName());
-        keyboard.setNumRow(request.getNumRow());
-        keyboard.setQweRow(request.getQweRow());
-        keyboard.setAsdRow(request.getAsdRow());
-        keyboard.setZxcRow(request.getZxcRow());
-        keyboard.setUsername(userDetails.getUsername());
-        keyboard.setDefault(request.isDefault());
-
-        Keyboard savedKeyboard = keyboardRepository.save(keyboard);
+        Keyboard savedKeyboard = keyboardRepository.save(request);
 
         return new ResponseEntity<>(savedKeyboard.getId().toHexString(), HttpStatus.CREATED);
     }
@@ -107,30 +99,30 @@ public class KeyboardController {
         return new ResponseEntity<>(deletedKeyboard.getId().toHexString(), HttpStatus.OK);
     }
 
-    private boolean isValidCreateKeyboardMapping(Map<String, String> numRow,
-                                                 Map<String, String> qweRow,
-                                                 Map<String, String> asdRow,
-                                                 Map<String, String> zxcRow) {
+    private boolean isValidCreateKeyboardMapping(List<Key> numRow,
+                                                 List<Key> qweRow,
+                                                 List<Key> asdRow,
+                                                 List<Key> zxcRow) {
         return isValidKeyRowMapping(numRow, Keys.Rows.NUM)
                 && isValidKeyRowMapping(qweRow, Keys.Rows.QWE)
                 && isValidKeyRowMapping(asdRow, Keys.Rows.ASD)
                 && isValidKeyRowMapping(zxcRow, Keys.Rows.ZXC);
     }
 
-    private boolean isValidKeyRowMapping(Map<String, String> row, int expectedRow) {
+    private boolean isValidKeyRowMapping(List<Key> row, int expectedRow) {
         if (row != null) {
-            Map<String, Boolean> visited = new HashMap<>();
-            for (String keyCode : row.keySet()) {
-                if (visited.containsKey(keyCode)) {
+            Map<Integer, Boolean> visited = new HashMap<>();
+            for (Key key : row) {
+                if (visited.containsKey(key.getKeyCode())) {
                     return false;
                 }
-                if (!Keys.keyCodeExists(Integer.parseInt(keyCode))) {
+                if (!Keys.keyCodeExists(key.getKeyCode())) {
                     return false;
                 }
-                if (!Keys.keyCodeIsOfRow(Integer.parseInt(keyCode), expectedRow)) {
+                if (!Keys.keyCodeIsOfRow(key.getKeyCode(), expectedRow)) {
                     return false;
                 }
-                visited.put(keyCode, true);
+                visited.put(key.getKeyCode(), true);
             }
         }
         return true;

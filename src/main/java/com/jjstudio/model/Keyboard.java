@@ -1,13 +1,14 @@
 package com.jjstudio.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.jjstudio.dto.keyboard.Key;
 import com.jjstudio.util.ObjectIdSerializer;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.FieldType;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
-import java.util.Map;
+import java.util.List;
 
 @Document(collection = "keyboards")
 public class Keyboard {
@@ -20,13 +21,13 @@ public class Keyboard {
 
     private String username;
 
-    private Map<String, String> numRow;
+    private List<Key> numRow;
 
-    private Map<String, String> qweRow;
+    private List<Key> qweRow;
 
-    private Map<String, String> asdRow;
+    private List<Key> asdRow;
 
-    private Map<String, String> zxcRow;
+    private List<Key> zxcRow;
 
     private boolean isDefault;
 
@@ -58,39 +59,39 @@ public class Keyboard {
         return isDefault;
     }
 
-    public void setDefault(boolean aDefault) {
-        isDefault = aDefault;
+    public void setDefault(boolean isDefault) {
+        this.isDefault = isDefault;
     }
 
-    public Map<String, String> getNumRow() {
+    public List<Key> getNumRow() {
         return numRow;
     }
 
-    public void setNumRow(Map<String, String> numRow) {
+    public void setNumRow(List<Key> numRow) {
         this.numRow = numRow;
     }
 
-    public Map<String, String> getQweRow() {
+    public List<Key> getQweRow() {
         return qweRow;
     }
 
-    public void setQweRow(Map<String, String> qweRow) {
+    public void setQweRow(List<Key> qweRow) {
         this.qweRow = qweRow;
     }
 
-    public Map<String, String> getAsdRow() {
+    public List<Key> getAsdRow() {
         return asdRow;
     }
 
-    public void setAsdRow(Map<String, String> asdRow) {
+    public void setAsdRow(List<Key> asdRow) {
         this.asdRow = asdRow;
     }
 
-    public Map<String, String> getZxcRow() {
+    public List<Key> getZxcRow() {
         return zxcRow;
     }
 
-    public void setZxcRow(Map<String, String> zxcRow) {
+    public void setZxcRow(List<Key> zxcRow) {
         this.zxcRow = zxcRow;
     }
 
