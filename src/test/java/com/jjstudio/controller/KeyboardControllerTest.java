@@ -1,7 +1,8 @@
 package com.jjstudio.controller;
 
 import com.jjstudio.config.SpringSecurityWebAuxTestConfig;
-import com.jjstudio.dto.keyboard.CreateKeyboardRequest;
+import com.jjstudio.dto.keyboard.Key;
+import com.jjstudio.model.Keyboard;
 import com.jjstudio.resource.KeyboardRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,7 +15,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.hamcrest.Matchers.containsString;
@@ -43,13 +46,12 @@ public class KeyboardControllerTest extends BaseControllerTest {
                 .andExpect(content().string(containsString("Invalid keyboard mapping configuration")));
     }
 
-    private CreateKeyboardRequest getInvalidNonExistentKeyMapping() {
-        Map<String, String> zxcRow = new HashMap<>();
-        zxcRow.put("-1", "12asdzx12");
-
-        CreateKeyboardRequest request = new CreateKeyboardRequest();
+    private Keyboard getInvalidNonExistentKeyMapping() {
+        Keyboard request = new Keyboard();
         request.setName("Invalid Key");
 
+        List<Key> zxcRow = new ArrayList<>();
+        zxcRow.add(new Key(48, '0', "1acq243caw121e312de", "Bass 1"));
         request.setZxcRow(zxcRow);
 
         return request;
