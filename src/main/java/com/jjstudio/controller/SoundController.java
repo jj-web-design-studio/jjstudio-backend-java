@@ -19,7 +19,7 @@ import java.util.List;
 @CrossOrigin("http://localhost:3000")
 public class SoundController {
 
-    private final Logger logger = LoggerFactory.getLogger(MySoundController.class);
+    private final Logger logger = LoggerFactory.getLogger(SoundController.class);
 
     @Autowired
     private SoundRepository soundRepository;
