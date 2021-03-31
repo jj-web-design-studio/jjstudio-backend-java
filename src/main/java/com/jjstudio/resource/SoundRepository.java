@@ -11,8 +11,6 @@ public interface SoundRepository extends MongoRepository<Sound, ObjectId> {
 
     Iterable<Sound> findByUsername(String username);
 
-    Iterable<Sound> findAllById(Iterable<ObjectId> id);
-
     @Query(delete = true)
     Sound deleteByIdAndUsername(ObjectId id, String username);
 
