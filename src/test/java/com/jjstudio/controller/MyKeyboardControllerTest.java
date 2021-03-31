@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         classes = SpringSecurityWebAuxTestConfig.class
 )
 @AutoConfigureMockMvc
-public class KeyboardControllerTest extends BaseControllerTest {
+public class MyKeyboardControllerTest extends BaseControllerTest {
 
     @MockBean
     KeyboardRepository keyboardRepository;

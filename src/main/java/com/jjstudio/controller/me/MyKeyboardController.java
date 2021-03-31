@@ -1,4 +1,4 @@
-package com.jjstudio.controller;
+package com.jjstudio.controller.me;
 
 import com.jjstudio.dto.keyboard.Key;
 import com.jjstudio.model.Keyboard;
@@ -30,9 +30,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("/v1/me/keyboards")
 @CrossOrigin("http://localhost:3000")
-public class KeyboardController {
+public class MyKeyboardController {
 
-    private final Logger logger = LoggerFactory.getLogger(KeyboardController.class);
+    private final Logger logger = LoggerFactory.getLogger(MyKeyboardController.class);
 
     @Autowired
     private KeyboardRepository keyboardRepository;
@@ -40,7 +40,7 @@ public class KeyboardController {
     @Autowired
     private AuthUtil authUtil;
 
-    @ApiOperation(value = "Create a keyboard", notes = "${KeyboardController.createKeyboard.notes}")
+    @ApiOperation(value = "Create a keyboard for current user", notes = "${MyKeyboardController.createKeyboard.notes}")
     @PostMapping
     public ResponseEntity<String> createKeyboard(@RequestBody Keyboard request,
                                                  Authentication authentication) {
@@ -63,24 +63,16 @@ public class KeyboardController {
         return new ResponseEntity<>(savedKeyboard.getId().toHexString(), HttpStatus.CREATED);
     }
 
-    @ApiOperation(value = "Get a keyboard", notes = "${KeyboardController.getKeyboardById.notes}")
+    @ApiOperation(value = "Get a keyboard for current user", notes = "${MyKeyboardController.getKeyboardById.notes}")
     @GetMapping("/{id}")
     public ResponseEntity<Keyboard> getKeyboardById(@PathVariable String id,
                                                     Authentication authentication) {
-        if ("default".equals(id)) {
-            Keyboard keyboard = keyboardRepository.findByIsDefault(true);
-            if (keyboard == null) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
-            return new ResponseEntity<>(keyboard, HttpStatus.OK);
-        }
-
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         return new ResponseEntity<>(keyboardRepository.findByIdAndUsername(new ObjectId(id), userDetails.getUsername()), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Get all keyboards", notes = "${KeyboardController.getAllKeyboards.notes}")
+    @ApiOperation(value = "Get all keyboards for current user", notes = "${MyKeyboardController.getAllKeyboards.notes}")
     @GetMapping
     public ResponseEntity<Iterable<Keyboard>> getAllKeyboards(Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -88,7 +80,7 @@ public class KeyboardController {
         return new ResponseEntity<>(keyboardRepository.findByUsername(userDetails.getUsername()), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Delete a keyboard", notes = "${KeyboardController.deleteKeyboardById.notes}")
+    @ApiOperation(value = "Delete a keyboard for current user", notes = "${MyKeyboardController.deleteKeyboardById.notes}")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteKeyboardById(@PathVariable String id,
                                                      Authentication authentication) {
