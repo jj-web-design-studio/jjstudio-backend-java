@@ -120,50 +120,6 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @ApiOperation(value = "Get current user", notes = "${UserController.getCurrentUser.notes}")
-    @GetMapping("/me")
-    public ResponseEntity<User> getCurrentUser(Authentication authentication) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
-        User user = userRepository.findByEmail(userDetails.getUsername());
-        return new ResponseEntity<>(user, HttpStatus.OK);
-    }
-
-    @ApiOperation(value = "Update current user", notes = "${UserController.updateCurrentUser.notes}")
-    @PostMapping("/me")
-    public ResponseEntity<String> updateCurrentUser(@RequestBody UpdateUserRequest request,
-                                                    Authentication authentication) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
-        User user = userRepository.findByEmail(userDetails.getUsername());
-
-        user.setEmail(request.getEmail() != null ? request.getEmail() : user.getEmail());
-        user.setPassword(request.getPassword() != null ? passwordEncoder.encode(request.getPassword()) : user.getPassword());
-        user.setFirstName(request.getFirstName() != null ? request.getFirstName() : user.getFirstName());
-        user.setLastName(request.getLastName() != null ? request.getLastName() : user.getLastName());
-        if (request.getRole() != null) {
-            try {
-                user.setRole(Role.valueOf(request.getRole()).toString());
-            } catch (IllegalArgumentException e) {
-                return new ResponseEntity<>("Invalid role type.", HttpStatus.BAD_REQUEST);
-            }
-        }
-        user.setRole(request.getRole() != null ? request.getRole() : user.getRole());
-
-        User updatedUser = userRepository.save(user);
-
-        return new ResponseEntity<>(updatedUser.getId().toHexString(), HttpStatus.OK);
-    }
-
-    @ApiOperation(value = "Delete current user", notes = "${UserController.deleteCurrentUser.notes}")
-    @DeleteMapping("/me")
-    public ResponseEntity<String> deleteCurrentUser(Authentication authentication) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
-        User deletedUser = userRepository.deleteByEmail(userDetails.getUsername());
-        return new ResponseEntity<>(deletedUser.getId().toHexString(), HttpStatus.NO_CONTENT);
-    }
-
     private boolean emailAlreadyExists(String email) {
         User existingUser = userRepository.findByEmail(email);
         return existingUser != null;
