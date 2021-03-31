@@ -1,4 +1,4 @@
-package com.jjstudio.controller;
+package com.jjstudio.controller.me;
 
 import com.jjstudio.model.Track;
 import com.jjstudio.resource.TrackRepository;
@@ -23,14 +23,14 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/v1/me/tracks")
 @CrossOrigin("http://localhost:3000")
-public class TrackController {
+public class MyTrackController {
 
-    private final Logger logger = LoggerFactory.getLogger(TrackController.class);
+    private final Logger logger = LoggerFactory.getLogger(MyTrackController.class);
 
     @Autowired
     private TrackRepository trackRepository;
 
-    @ApiOperation(value = "Save a track", notes = "${TrackController.createTrack.notes}")
+    @ApiOperation(value = "Save a track for current user", notes = "${MyTrackController.createTrack.notes}")
     @PostMapping
     public ResponseEntity<String> createTrack(@RequestBody Track request,
                                               Authentication authentication) {
@@ -44,7 +44,7 @@ public class TrackController {
         return new ResponseEntity<>(savedTracked.getId().toHexString(), HttpStatus.CREATED);
     }
 
-    @ApiOperation(value = "Get a track", notes = "${TrackController.getTrackById.notes}")
+    @ApiOperation(value = "Get a track for current user", notes = "${MyTrackController.getTrackById.notes}")
     @GetMapping("/{id}")
     public ResponseEntity<Track> getTrackById(@PathVariable String id,
                                               Authentication authentication) {
@@ -53,7 +53,7 @@ public class TrackController {
         return new ResponseEntity<>(trackRepository.findByIdAndUsername(new ObjectId(id), userDetails.getUsername()), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Get all tracks", notes = "${TrackController.getAllTracks.notes}")
+    @ApiOperation(value = "Get all tracks for current user", notes = "${MyTrackController.getAllTracks.notes}")
     @GetMapping
     public ResponseEntity<Iterable<Track>> getAllTracks(Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -61,7 +61,7 @@ public class TrackController {
         return new ResponseEntity<>(trackRepository.findByUsername(userDetails.getUsername()), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Delete a track", notes = "${TrackController.deleteTrackById.notes}")
+    @ApiOperation(value = "Delete a track for current user", notes = "${MyTrackController.deleteTrackById.notes}")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteTrackById(@PathVariable String id,
                                                   Authentication authentication) {
