@@ -79,4 +79,4 @@ docker volume create mongodbdata
 ```bash
 docker-compose up
 ```
-6. Verify that JJ Studio is up and running by visiting [localhost:3000](http://localhost:3000) in your browser.
+6. Verify that JJ Studio is up and running by visiting [localhost:3000](http://localhost:3000) in your browser. You can also view Swagger doc at [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html).
