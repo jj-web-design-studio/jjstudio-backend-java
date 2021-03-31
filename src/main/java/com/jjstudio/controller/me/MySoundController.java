@@ -1,4 +1,4 @@
-package com.jjstudio.controller;
+package com.jjstudio.controller.me;
 
 import com.jjstudio.model.Sound;
 import com.jjstudio.resource.SoundRepository;
