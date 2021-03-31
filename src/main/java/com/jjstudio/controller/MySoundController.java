@@ -29,9 +29,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/v1/me/sounds")
 @CrossOrigin("http://localhost:3000")
-public class SoundController {
+public class MySoundController {
 
-    private final Logger logger = LoggerFactory.getLogger(SoundController.class);
+    private final Logger logger = LoggerFactory.getLogger(MySoundController.class);
 
     @Autowired
     private SoundRepository soundRepository;
