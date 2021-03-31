@@ -36,7 +36,7 @@ public class MySoundController {
     @Autowired
     private SoundRepository soundRepository;
 
-    @ApiOperation(value = "Create a sound", notes = "${SoundController.createSound.notes}")
+    @ApiOperation(value = "Create a sound for current user", notes = "${SoundController.createSound.notes}")
     @PostMapping
     public ResponseEntity<String> createSound(@RequestParam("file") MultipartFile multipartFile,
                                               @RequestParam("name") String name,
@@ -64,7 +64,7 @@ public class MySoundController {
         return new ResponseEntity<>(savedSound.getId().toHexString(), HttpStatus.CREATED);
     }
 
-    @ApiOperation(value = "Get a sound", notes = "${SoundController.getSoundById.notes}")
+    @ApiOperation(value = "Get a sound for current user", notes = "${SoundController.getSoundById.notes}")
     @GetMapping("/{id}")
     public ResponseEntity<Sound> getSoundById(@PathVariable String id,
                                               Authentication authentication) {
@@ -72,7 +72,7 @@ public class MySoundController {
         return new ResponseEntity<>(soundRepository.findByIdAndUsername(new ObjectId(id), userDetails.getUsername()), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Get all sounds", notes = "${SoundController.getAllSounds.notes}")
+    @ApiOperation(value = "Get all sounds for current user", notes = "${SoundController.getAllSounds.notes}")
     @GetMapping
     public ResponseEntity<Iterable<Sound>> getAllSounds(@RequestParam(value = "ids", required = false) List<String> ids,
                                                         Authentication authentication) {
@@ -90,7 +90,7 @@ public class MySoundController {
         return new ResponseEntity<>(soundRepository.findByUsername(userDetails.getUsername()), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Delete a sound", notes = "${SoundController.deleteSoundById.notes}")
+    @ApiOperation(value = "Delete a sound for current user", notes = "${SoundController.deleteSoundById.notes}")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteSoundById(@PathVariable String id,
                                                   Authentication authentication) {
