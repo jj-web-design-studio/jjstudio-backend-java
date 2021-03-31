@@ -3,6 +3,7 @@ package com.jjstudio.config;
 import com.jjstudio.config.auth.CustomBasicAuthenticationEntryPoint;
 import com.jjstudio.filter.JwtRequestFilter;
 import com.jjstudio.service.MyUserDetailsServiceImpl;
+import com.jjstudio.util.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -43,9 +44,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .antMatchers("/", "/home").permitAll()
-                .antMatchers(HttpMethod.POST, "/v1/users", "/v1/auth").permitAll()
-                .antMatchers(HttpMethod.GET, "/v1/me/keyboards/default").permitAll()
-                .anyRequest().authenticated()
+                .antMatchers("/v1/me/*").authenticated()
+                .antMatchers(HttpMethod.GET, "/v1/users").hasRole(Role.ADMIN.toString())
+                .anyRequest().permitAll()
                 .and()
             .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
